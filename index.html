@@ -881,11 +881,12 @@ html.light .tl-dot { background: var(--accent); }
   input, textarea { cursor: text; }
 
   /* Home */
-  .home-body { margin-top: 80px; }
-  .home-left { padding: 28px 28px; }
-  .home-carousel { height: 42vh; min-height: 240px; }
-  .home-bottom { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .cta-group { flex-direction: row; align-items: center; gap: 16px; }
+  .home-body { margin-top: 76px; }
+  .home-left { padding: 32px 32px; display: flex; flex-direction: column; gap: 0; justify-content: space-between; }
+  .home-carousel { height: 40vh; min-height: 240px; }
+  .home-bottom { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .home-desc { max-width: 480px; line-height: 1.75; }
+  .cta-group { flex-direction: row; align-items: center; gap: 20px; }
 
   /* Disc strip */
   .disc-strip { grid-template-columns: repeat(3, 1fr); }
@@ -893,21 +894,35 @@ html.light .tl-dot { background: var(--accent); }
 
   /* Portfolio overview */
   .portfolio-overview { flex-direction: column; overflow-y: auto; }
-  .po-panel { flex: 0 0 auto !important; height: 25vh; min-height: 110px; border-right: none; border-bottom: 0.5px solid var(--border-subtle); transition: none; }
+  .po-panel {
+    flex: 0 0 auto !important; height: 25vh; min-height: 120px;
+    border-right: none; border-bottom: 0.5px solid var(--border-subtle);
+    transition: none; padding: 28px 32px;
+  }
   .po-panel:last-child { border-bottom: none; }
   .po-panel:hover { flex: 0 0 auto !important; }
-  .po-panel-title { font-size: clamp(18px, 4vw, 28px); }
+  .po-panel-title { font-size: clamp(20px, 3.5vw, 32px); }
+  .po-panel-num { font-size: 9px; margin-bottom: 8px; }
 
   /* About */
-  .about-right { padding: 32px 28px; }
+  .about-right { padding: 36px 32px; }
+  .about-label { margin-bottom: 24px; }
+  .about-body { line-height: 1.75; }
 
   /* Contact */
-  .contact-left, .contact-right { padding: 32px 28px; }
+  .contact-left { padding: 36px 32px; }
+  .contact-right { padding: 36px 32px; }
+  .contact-sub { max-width: 100%; }
 
   /* Projet */
-  .project-top { padding: 80px 24px 20px; }
-  .project-body { padding: 20px 24px 32px; }
-  .tfe-wrap { padding: 20px 24px 32px; }
+  .project-top { padding: 84px 28px 24px; }
+  .project-body { padding: 24px 28px 36px; }
+  .project-meta { gap: 24px; flex-wrap: wrap; }
+  .tfe-wrap { padding: 24px 28px 36px; }
+
+  /* Portfolio */
+  .portfolio-header { padding: 28px 28px 20px; }
+  .portfolio-subtitle { max-width: 100%; }
 }
 
 /* ═══════════════════════════════════
@@ -923,47 +938,91 @@ html.light .tl-dot { background: var(--accent); }
   .hamburger { width: 30px; height: 30px; }
 
   /* Home */
-  .home-body { margin-top: 68px; }
-  .home-left { padding: 18px 20px; }
-  .home-title { font-size: clamp(40px, 12vw, 60px); }
-  .eyebrow-word { font-size: clamp(16px, 5.5vw, 26px); }
-  .home-desc { font-size: 12px; max-width: 100%; }
-  .home-carousel { height: 36vh; min-height: 190px; }
-  .carousel-slide { padding: 20px 18px; }
-  .carousel-slide-title { font-size: clamp(16px, 5.5vw, 24px); }
-  .carousel-slide-sub { font-size: 11px; }
-  .carousel-nav { bottom: 16px; right: 16px; gap: 6px; }
+  .home-body { margin-top: 62px; }
+  .home-left { padding: 20px 20px; }
+  .home-title { font-size: clamp(38px, 10.5vw, 56px); line-height: 0.92; }
+  .eyebrow-word { font-size: clamp(15px, 4.5vw, 22px); letter-spacing: 0.1em; }
+  .eyebrow { margin-bottom: 6px; }
+  .home-desc { font-size: 13px; max-width: 100%; line-height: 1.7; }
+  .home-bottom { gap: 16px; }
+  .cta-group { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .btn-mint { font-size: 11px; padding: 12px 24px; }
+  .scroll-hint { font-size: 10px; }
+  .home-carousel { height: 34vh; min-height: 180px; }
+  .carousel-slide { padding: 20px 20px; }
+  .carousel-slide-cat { font-size: 8px; margin-bottom: 7px; }
+  .carousel-slide-title { font-size: clamp(17px, 5vw, 24px); line-height: 1.1; }
+  .carousel-slide-sub { font-size: 12px; margin-top: 6px; line-height: 1.5; }
+  .carousel-nav { bottom: 14px; right: 14px; gap: 6px; }
 
   /* Disc strip */
   .disc-strip { grid-template-columns: repeat(2, 1fr); }
   .disc-item:nth-child(n+3) { display: none; }
+  .d-name { font-size: 10px; }
+  .d-num { font-size: 13px; }
 
   /* Portfolio */
-  .portfolio-header { padding: 18px 16px 14px; }
-  .portfolio-title { font-size: clamp(22px, 6vw, 32px); }
-  .portfolio-grid { padding: 12px 12px 20px; gap: 8px; }
-  .portfolio-subtitle { font-size: 12px; }
+  .portfolio-header { padding: 18px 20px 14px; }
+  .portfolio-label { margin-bottom: 8px; font-size: 9px; }
+  .portfolio-title { font-size: clamp(22px, 6.5vw, 34px); }
+  .portfolio-count { font-size: 10px; }
+  .portfolio-subtitle { font-size: 12px; line-height: 1.6; margin-top: 6px; max-width: 100%; }
+  .portfolio-grid { padding: 12px 14px 24px; gap: 10px; }
+  .portfolio-back { font-size: 10px; }
 
   /* Portfolio overview */
-  .po-panel { min-height: 90px; padding: 20px 18px; }
+  .po-panel { min-height: 100px; padding: 20px 20px; }
+  .po-panel-title { font-size: clamp(17px, 5vw, 24px); }
+  .po-panel-num { font-size: 8px; }
 
   /* About */
-  .about-body { margin-top: 16px; }
-  .about-title { font-size: clamp(26px, 8vw, 38px); }
-  .about-right { padding: 20px 16px; }
-  .about-cta { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .about-right { padding: 24px 20px; }
+  .about-label { font-size: 9px; margin-bottom: 18px; }
+  .about-title { font-size: clamp(28px, 8vw, 42px); letter-spacing: -0.03em; }
+  .about-body { font-size: 13px; line-height: 1.7; margin-top: 16px; }
+  .about-section-title { font-size: 9px; margin-bottom: 14px; }
+  .skill-name { font-size: 12px; }
+  .tl-place { font-size: 12px; }
+  .tl-desc { font-size: 11px; line-height: 1.55; }
+  .tl-year { font-size: 10px; }
+  .about-cta { margin-top: 24px; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .btn-outline { font-size: 10px; padding: 10px 20px; }
 
   /* Contact */
-  .contact-left, .contact-right { padding: 20px 16px; }
-  .contact-title { font-size: clamp(26px, 8vw, 38px); }
+  .contact-left { padding: 24px 20px; }
+  .contact-right { padding: 24px 20px; }
+  .contact-label { font-size: 9px; margin-bottom: 18px; }
+  .contact-title { font-size: clamp(28px, 8vw, 42px); letter-spacing: -0.03em; }
+  .contact-sub { font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 100%; }
+  .link-label { font-size: 12px; }
+  .link-val { font-size: 11px; }
+  .contact-links { margin-top: 24px; }
+  .form-label { font-size: 9px; margin-bottom: 20px; }
+  .form-group label { font-size: 9px; }
+  .form-group input, .form-group textarea { font-size: 13px; }
 
   /* Projet */
-  .project-top { padding: 68px 16px 16px; }
-  .project-body { padding: 14px 16px 24px; }
-  .project-title { font-size: clamp(26px, 8vw, 40px); }
-  .project-meta { gap: 20px; flex-wrap: wrap; }
-  .tfe-wrap { padding: 14px 16px 24px; }
-  .tfe-featured .portfolio-card { width: 240px; }
+  .project-top { padding: 66px 20px 20px; }
+  .project-body { padding: 16px 20px 28px; }
+  .project-tag { font-size: 9px; }
+  .project-title { font-size: clamp(26px, 8vw, 42px); letter-spacing: -0.04em; line-height: 1; }
+  .project-subtitle { font-size: 12px; }
+  .project-desc { font-size: 12px; line-height: 1.7; }
+  .project-meta { gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+  .project-meta-label { font-size: 9px; }
+  .project-meta-value { font-size: 11px; }
+  .project-back { font-size: 11px; }
+  .project-section-label { font-size: 9px; }
+  .cell-heading { font-size: clamp(16px, 4.5vw, 22px); }
+  .cell-body { font-size: 12px; line-height: 1.7; }
+  .tfe-wrap { padding: 16px 20px 28px; }
+  .tfe-section .s-title { font-size: clamp(18px, 5.5vw, 26px); }
+  .tfe-section .s-desc { font-size: 12px; line-height: 1.65; }
+  .tfe-featured .portfolio-card { width: min(240px, 65vw); }
+
+  /* Nebula */
+  .nebula-section-title { font-size: 14px; }
+  .nebula-section-desc { font-size: 12px; line-height: 1.75; }
 
   /* Page indicator */
   .page-indicator { bottom: 12px; gap: 6px; }
@@ -976,13 +1035,20 @@ html.light .tl-dot { background: var(--accent); }
    RESPONSIVE — Petit mobile (≤ 375px)
 ═══════════════════════════════════ */
 @media (max-width: 375px) {
-  .home-left { padding: 14px 16px; }
-  .home-title { font-size: 38px; }
-  .portfolio-grid { gap: 6px; padding: 10px 10px 16px; }
-  .about-right { padding: 16px 14px; }
-  .contact-left, .contact-right { padding: 16px 14px; }
-  .project-top { padding: 62px 14px 14px; }
-  .project-body { padding: 12px 14px 20px; }
+  .home-left { padding: 16px 16px; }
+  .home-title { font-size: 36px; }
+  .eyebrow-word { font-size: 14px; }
+  .home-desc { font-size: 12px; }
+  .portfolio-grid { gap: 8px; padding: 10px 12px 20px; }
+  .about-right { padding: 20px 16px; }
+  .about-title { font-size: 26px; }
+  .contact-left, .contact-right { padding: 20px 16px; }
+  .contact-title { font-size: 26px; }
+  .project-top { padding: 60px 16px 16px; }
+  .project-body { padding: 14px 16px 24px; }
+  .project-title { font-size: 24px; }
+  .tfe-wrap { padding: 14px 16px 24px; }
+  .po-panel { padding: 16px 16px; }
 }
 </style>
 </head>
