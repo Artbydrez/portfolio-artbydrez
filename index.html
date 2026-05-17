@@ -1767,7 +1767,7 @@ function openLightbox(src, type) {
   const lb = document.getElementById('lightbox');
   const wrap = document.getElementById('lightbox-media');
   wrap.innerHTML = type === 'video'
-    ? `<video src="${src}" autoplay loop muted playsinline controls style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;"></video>`
+    ? `<video src="${src}" autoplay loop muted playsinline style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;"></video>`
     : `<img src="${src}" style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;">`;
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
