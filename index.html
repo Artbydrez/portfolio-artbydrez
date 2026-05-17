@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Art by Drez — Loris Fauville</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; }
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg); color: var(--text-primary);
+  transition: background-color 0.4s ease, color 0.3s ease;
+}
+:root {
+  --mint: #C7FFED;
+  --accent: #C7FFED;
+  --on-mint: #111111;
+  --bg: #0c0c0c;
+  --surface: #111111;
+  --surface-2: #161616;
+  --hover: #222222;
+  --active: #1e1e1e;
+  --border: #2a2a2a;
+  --border-subtle: #1a1a1a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #999;
+  --text-muted: #555;
+  --text-faint: #444;
+  --text-label: #888;
+  --text-dim: #666;
+  --insta-border: rgba(255,255,255,0.25);
+  --insta-color: rgba(255,255,255,0.5);
+  --cursor-dot: var(--mint);
+  --cursor-ring: rgba(199,255,237,0.35);
+  --cursor-ring-hover: rgba(199,255,237,0.7);
+}
+html.light {
+  --accent: #009966;
+  --bg: #f5f5f2;
+  --surface: #ffffff;
+  --surface-2: #f0efed;
+  --hover: #e8e8e3;
+  --active: #ebebea;
+  --border: #dedbd7;
+  --border-subtle: #e8e8e3;
+  --text-primary: #111111;
+  --text-secondary: #666;
+  --text-muted: #aaa;
+  --text-faint: #ccc;
+  --text-label: #777;
+  --text-dim: #999;
+  --insta-border: rgba(0,0,0,0.2);
+  --insta-color: rgba(0,0,0,0.45);
+  --cursor-dot: #009966;
+  --cursor-ring: rgba(0,153,102,0.3);
+  --cursor-ring-hover: rgba(0,153,102,0.65);
+}
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.25;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+.navbar {
+  position: fixed; top: 28px; left: 0; right: 0;
+  display: flex; justify-content: center; z-index: 200;
+}
+.nav-pill {
+  display: flex; align-items: center;
+  background: var(--surface-2); border: 0.5px solid var(--border);
+  border-radius: 100px; padding: 5px; gap: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  position: relative;
+}
+.nav-logo {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg); border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0; transition: opacity 0.2s;
+  overflow: hidden;
+}
+.nav-logo:hover { opacity: 0.85; }
+.nav-links { display: flex; align-items: center; gap: 2px; padding: 0 6px; position: relative; }
+.nav-link {
+  font-size: 12px; color: var(--text-label); text-decoration: none; letter-spacing: 0.04em;
+  padding: 8px 16px; border-radius: 100px; cursor: pointer;
+  border: none; background: none; font-family: inherit;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--text-primary); background: var(--hover); }
+.nav-link.active { color: var(--text-primary); background: var(--active); }
+.nav-dropdown-wrap { position: relative; }
+.nav-dropdown-btn {
+  font-size: 12px; color: var(--text-label); letter-spacing: 0.04em;
+  padding: 8px 16px; border-radius: 100px; cursor: pointer;
+  border: none; background: none; font-family: inherit;
+  transition: color 0.2s, background 0.2s;
+  display: flex; align-items: center; gap: 5px;
+  white-space: nowrap;
+}
+.nav-dropdown-btn:hover,
+.nav-dropdown-wrap:hover .nav-dropdown-btn,
+.nav-dropdown-wrap.open .nav-dropdown-btn {
+  color: var(--text-primary); background: var(--hover);
+}
+.nav-dropdown-btn.active { color: var(--text-primary); background: var(--active); }
+.dropdown-arrow {
+  display: inline-block;
+  font-size: 8px; color: var(--text-muted);
+  transition: transform 0.25s ease;
+}
+.nav-dropdown-wrap.open .dropdown-arrow,
+.nav-dropdown-wrap:hover .dropdown-arrow {
+  transform: rotate(180deg); color: var(--accent);
+}
+.dropdown-menu {
+  position: absolute; top: calc(100% + 12px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-2); border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  min-width: 210px;
+  opacity: 0; pointer-events: none;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+}
+.nav-dropdown-wrap::after {
+  content: ''; position: absolute; top: 100%; left: 0;
+  width: 100%; height: 14px;
+}
+.nav-dropdown-wrap:hover .dropdown-menu,
+.nav-dropdown-wrap.open .dropdown-menu {
+  opacity: 1; pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.dropdown-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 18px; cursor: pointer;
+  border-bottom: 0.5px solid var(--border-subtle);
+  text-decoration: none; color: var(--text-label);
+  font-size: 12px; letter-spacing: 0.04em;
+  transition: background 0.15s, color 0.15s;
+}
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-item:hover { background: var(--active); color: var(--accent); }
+.dropdown-item:hover .dropdown-item-num { color: var(--accent); }
+.dropdown-item-num { font-size: 10px; color: var(--text-muted); transition: color 0.15s; }
+.nav-cta {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  padding: 9px 18px; border-radius: 100px;
+  background: var(--mint); border: none; color: var(--on-mint);
+  cursor: pointer; font-family: inherit; transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0;
+}
+.slider {
+  position: fixed; inset: 0; display: flex;
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+  will-change: transform;
+}
+.slider.slide-0 { transform: translateX(0); }
+.slider.slide-1 { transform: translateX(-100vw); }
+.slider.slide-2 { transform: translateX(-200vw); }
+.slider.slide-3 { transform: translateX(-300vw); }
+.slider.slide-4 { transform: translateX(-400vw); }
+.slider.slide-5 { transform: translateX(-500vw); }
+.slider.slide-6 { transform: translateX(-600vw); }
+.slider.slide-7 { transform: translateX(-700vw); }
+.slider.slide-8 { transform: translateX(-800vw); }
+.slider.slide-9 { transform: translateX(-900vw); }
+.slider.slide-10 { transform: translateX(-1000vw); }
+.slider.slide-11 { transform: translateX(-1100vw); }
+.page {
+  width: 100vw; height: 100vh; flex-shrink: 0;
+  overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+}
+.home-body {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr; margin-top: 96px;
+}
+.home-left {
+  padding: 44px 52px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.eyebrow {
+  display: flex; align-items: center; gap: 16px;
+  overflow: hidden; margin-bottom: 8px;
+}
+.eyebrow-word {
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 0.8px var(--accent);
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+.eyebrow-word::after { display: none; }
+.eyebrow-line {
+  display: inline-block; height: 0.5px; background: var(--mint);
+  width: 0; opacity: 0.4;
+  animation: growLine 1s ease 1.4s forwards;
+}
+@keyframes growLine { from { width: 0; } to { width: 32px; } }
+.home-title { font-size: clamp(60px, 7.5vw, 96px); font-weight: 700; letter-spacing: -0.04em; line-height: 0.9; }
+.home-title .t-first { display: block; color: var(--accent); }
+.home-title .t-last { display: block; font-weight: 300; color: transparent; -webkit-text-stroke: 0.8px var(--text-dim); }
+.home-sub {
+  font-size: 11px; color: var(--text-label); letter-spacing: 0.1em; text-transform: uppercase;
+  margin-top: 20px; display: flex; align-items: center; gap: 10px;
+}
+.home-sub::before { content: ''; display: inline-block; width: 18px; height: 0.5px; background: var(--text-label); }
+.home-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+.home-desc { font-size: 13px; line-height: 1.85; color: var(--text-secondary); max-width: 240px; }
+.home-desc em { color: var(--text-muted); font-style: italic; }
+.cta-group { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.btn-mint {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 12px 28px; background: var(--mint); border: none; color: var(--on-mint);
+  cursor: pointer; font-family: inherit; transition: opacity 0.2s;
+}
+.btn-mint:hover { opacity: 0.85; }
+.scroll-hint { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; }
+.home-right { position: relative; overflow: hidden; background: var(--bg); }
+.home-photo {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  height: 100%; width: auto;
+  display: block;
+  transition: transform 0.6s ease;
+}
+.home-right::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(199,255,237,0); mix-blend-mode: color;
+  transition: background 0.6s ease; pointer-events: none; z-index: 1;
+}
+.home-right:hover::after { background: rgba(199,255,237,0.18); }
+.photo-fade {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 140px;
+  background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; z-index: 2;
+}
+.accent-dot { position: absolute; top: 20px; left: 20px; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); z-index: 3; }
+.disc-strip { border-top: 0.5px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); }
+.disc-item {
+  padding: 16px 24px; border-right: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; position: relative; overflow: hidden; transition: background 0.3s;
+}
+.disc-item:last-child { border-right: none; }
+.disc-item::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 120%, rgba(199,255,237,0.18) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
+}
+.disc-item::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1.5px;
+  background: var(--mint); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.77, 0, 0.18, 1); pointer-events: none;
+}
+.disc-item:hover { background: var(--surface); }
+.disc-item:hover::before { opacity: 1; }
+.disc-item:hover::after { transform: scaleX(1); }
+.disc-item:hover .d-name, .disc-item:hover .d-num { color: var(--accent); }
+.d-name { font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-label); position: relative; z-index: 1; transition: color 0.3s; }
+.d-num { font-size: 15px; font-weight: 300; color: var(--text-muted); position: relative; z-index: 1; transition: color 0.3s; }
+.ticker {
+  border-top: 0.5px solid var(--border-subtle);
+  overflow: hidden; white-space: nowrap;
+  padding: 11px 0; position: relative;
+  -webkit-mask: radial-gradient(ellipse 62% 400% at 50% 50%, black 20%, transparent 72%);
+  mask: radial-gradient(ellipse 62% 400% at 50% 50%, black 20%, transparent 72%);
+}
+.ticker-inner {
+  display: inline-block;
+  animation: tickerAnim 32s linear infinite;
+  font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--text-secondary);
+  will-change: transform;
+}
+.ticker:hover .ticker-inner { animation-play-state: paused; }
+.t-word { color: var(--text-primary); font-weight: 500; }
+.t-sep  { color: var(--accent); margin: 0 22px; opacity: 0.9; }
+.about-wrap {
+  flex: 1; display: grid; grid-template-columns: 42% 58%; margin-top: 96px;
+}
+.about-left {
+  border-right: 0.5px solid var(--border); overflow: hidden; height: 100%;
+}
+.about-label {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 36px;
+}
+.about-label::before { content: ''; display: inline-block; width: 24px; height: 0.5px; background: var(--text-label); }
+.about-title { font-size: clamp(36px, 4.5vw, 56px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.about-title span { color: var(--accent); }
+.about-body { font-size: 13px; line-height: 1.85; color: var(--text-secondary); margin-top: 24px; }
+.about-body p + p { margin-top: 14px; }
+.about-body strong { color: var(--text-primary); font-weight: 500; }
+.about-cta { margin-top: 36px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-outline {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 11px 24px; border: 0.5px solid var(--border); background: transparent;
+  color: var(--text-primary); cursor: pointer; font-family: inherit;
+  text-decoration: none; display: inline-block;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.insta-fixed {
+  position: fixed; top: 32px; right: 32px; z-index: 200;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 0.5px solid var(--insta-border); background: transparent;
+  color: var(--insta-color);
+  text-decoration: none; display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+.insta-fixed::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 100%;
+  background: var(--mint); transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.77, 0, 0.18, 1); z-index: 0;
+}
+.insta-fixed:hover { color: var(--on-mint); border-color: var(--accent); }
+.insta-fixed:hover::before { transform: translateY(0); }
+.insta-fixed svg { position: relative; z-index: 1; }
+.about-right {
+  padding: 52px 60px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto;
+}
+.about-section-title { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label); margin-bottom: 20px; }
+.skills-list { display: flex; flex-direction: column; }
+.skill-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 0.5px solid var(--border);
+}
+.skill-row:first-of-type { border-top: 0.5px solid var(--border); }
+.skill-name { font-size: 13px; color: var(--text-primary); }
+.skill-bar-wrap { width: 96px; height: 1.5px; background: var(--border); border-radius: 2px; }
+.skill-bar { height: 1.5px; background: var(--mint); border-radius: 2px; }
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: grid; grid-template-columns: 52px 20px 1fr; padding-bottom: 24px; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-year { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; padding-top: 3px; }
+.tl-line-wrap { display: flex; flex-direction: column; align-items: center; }
+.tl-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint); margin-top: 4px; flex-shrink: 0; }
+.tl-line { width: 0.5px; flex: 1; background: var(--border); margin-top: 5px; }
+.tl-item:last-child .tl-line { display: none; }
+.tl-body { padding-top: 2px; padding-left: 4px; }
+.tl-place { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
+.tl-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.contact-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; margin-top: 96px; }
+.contact-left {
+  padding: 48px 52px; border-right: 0.5px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.contact-label {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 36px;
+}
+.contact-label::before { content: ''; display: inline-block; width: 24px; height: 0.5px; background: var(--text-label); }
+.contact-title { font-size: clamp(36px, 4.5vw, 56px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.contact-title span { color: var(--accent); }
+.contact-sub { font-size: 13px; line-height: 1.8; color: var(--text-secondary); margin-top: 20px; max-width: 360px; }
+.contact-links { margin-top: 36px; display: flex; flex-direction: column; }
+.contact-link-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0; border-bottom: 0.5px solid var(--border);
+  cursor: pointer; transition: color 0.2s; text-decoration: none; color: var(--text-primary);
+}
+.contact-link-row:first-of-type { border-top: 0.5px solid var(--border); }
+.contact-link-row:hover { color: var(--accent); }
+.contact-link-row:hover .link-arrow { transform: translate(3px, -3px); }
+.link-label { font-size: 13px; letter-spacing: 0.04em; }
+.link-val { font-size: 12px; color: var(--text-muted); }
+.link-arrow { font-size: 14px; transition: transform 0.2s ease; }
+.contact-right { padding: 48px 52px; display: flex; flex-direction: column; justify-content: center; }
+.form-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label); margin-bottom: 28px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.form-group input, .form-group textarea {
+  width: 100%; background: transparent; border: none; border-bottom: 0.5px solid var(--border);
+  color: var(--text-primary); font-family: inherit; font-size: 13px;
+  padding: 10px 0; outline: none; transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+.form-group textarea { resize: none; height: 80px; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-muted); }
+.form-submit {
+  margin-top: 24px; width: 100%; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 14px; background: var(--mint); border: none; color: var(--on-mint);
+  cursor: pointer; font-family: inherit; transition: opacity 0.2s;
+}
+.form-submit:hover { opacity: 0.85; }
+.portfolio-wrap {
+  flex: 1; display: flex; flex-direction: column; margin-top: 96px; overflow: hidden;
+}
+.portfolio-header {
+  padding: 36px 52px 24px; border-bottom: 0.5px solid var(--border);
+  display: flex; align-items: flex-end; justify-content: space-between; flex-shrink: 0;
+}
+.portfolio-label {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.portfolio-label::before { content: ''; display: inline-block; width: 24px; height: 0.5px; background: var(--text-label); }
+.portfolio-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.portfolio-title span { color: var(--accent); }
+.portfolio-count { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; }
+.portfolio-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 10px; max-width: 460px; line-height: 1.6; }
+.portfolio-grid {
+  flex: 1; overflow-y: auto;
+  padding: 24px 36px 40px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+}
+.pg-sport    { grid-template-columns: repeat(4, 1fr); }
+.pg-motion   { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); overflow: hidden; align-items: stretch; }
+.pg-motion .card-video { aspect-ratio: unset; }
+.pg-identite { grid-template-columns: repeat(3, 1fr); }
+/* Cellule texte — style magazine dans les pages projet */
+.project-cell.text-cell { padding: 32px 36px; display: flex; flex-direction: column; justify-content: center; gap: 12px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; }
+.cell-label { font-size: 10px; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; }
+.cell-heading { font-size: clamp(18px, 1.8vw, 24px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+.cell-body { font-size: 12px; color: var(--text-secondary); line-height: 1.75; }
+.pg-uiux     { grid-template-columns: repeat(3, 1fr); }
+.tfe-wrap { flex: 1; overflow-y: auto; padding: 24px 36px 40px; display: flex; flex-direction: column; }
+.tfe-grid { display: grid; gap: 20px; align-items: start; margin: 0 0 6px; }
+.tfe-section { padding: 30px 2px 16px; border-top: 0.5px solid var(--border); }
+.tfe-wrap > .tfe-section:first-child { border-top: none; padding-top: 2px; }
+.tfe-section .s-label { font-size: 10px; color: var(--accent); letter-spacing: 0.16em; text-transform: uppercase; }
+.tfe-section .s-title { font-size: clamp(20px, 2.4vw, 30px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: 10px; }
+.tfe-section .s-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-top: 10px; max-width: 640px; }
+/* featured : spot pub centré */
+.tfe-featured { display: flex; justify-content: center; padding-bottom: 16px; }
+.tfe-featured .portfolio-card { width: 320px; flex-shrink: 0; aspect-ratio: 9/16; padding: 0; overflow: hidden; }
+.tfe-featured .portfolio-card-bg { position: absolute; inset: 0; }
+.tfe-featured .portfolio-card-bg video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Carte : la hauteur est définie par l'image, jamais par un ratio forcé */
+.portfolio-card {
+  position: relative;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  cursor: pointer;
+  padding: 12px;
+  transition: border-color 0.3s;
+}
+.portfolio-card:hover { border-color: rgba(199,255,237,0.4); }
+
+/* Card-bg en flux normal : l'image pousse la hauteur */
+.portfolio-card-bg { display: block; line-height: 0; }
+.portfolio-card-bg img {
+  display: block; width: 100%; height: auto;
+  transition: transform 0.45s cubic-bezier(0.77,0,0.18,1);
+}
+.portfolio-card:hover .portfolio-card-bg img { transform: scale(1.03); }
+
+/* Vidéos : ratio fixe uniquement pour les vidéos */
+.portfolio-card.card-video { padding: 0; aspect-ratio: 9/16; overflow: hidden; }
+.portfolio-card.card-video .portfolio-card-bg { position: absolute; inset: 0; }
+.portfolio-card.card-video .portfolio-card-bg video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.45s cubic-bezier(0.77,0,0.18,1);
+}
+.portfolio-card.card-video:hover .portfolio-card-bg video { transform: scale(1.03); }
+
+/* Overlay au survol */
+.portfolio-card-inner {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 18px 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 55%);
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.portfolio-card:hover .portfolio-card-inner { opacity: 1; }
+
+.portfolio-card-tag {
+  font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 4px;
+}
+.portfolio-card-name { font-size: 12px; font-weight: 500; color: #fff; line-height: 1.3; }
+
+.portfolio-back {
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+}
+.portfolio-back:hover { color: var(--accent); }
+@media (max-width: 900px) {
+  .portfolio-grid { grid-template-columns: repeat(2,1fr) !important; padding: 16px 20px; gap: 14px; }
+  .portfolio-header { padding: 28px 24px 20px; }
+}
+
+/* ── PROJECT DETAIL ── */
+.project-wrap {
+  display: flex; flex-direction: column;
+  height: 100%; padding: 0; overflow-y: auto;
+}
+.project-top {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; padding: 90px 48px 32px; flex-shrink: 0;
+  border-bottom: 0.5px solid var(--border-subtle);
+}
+.project-top-left { display: flex; flex-direction: column; gap: 10px; padding-right: 40px; }
+.project-top-right { display: flex; flex-direction: column; justify-content: space-between; padding-left: 40px; border-left: 0.5px solid var(--border-subtle); }
+.project-tag { font-size: 10px; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; }
+.project-title { font-size: clamp(36px, 4.5vw, 64px); font-weight: 700; letter-spacing: -0.04em; line-height: 0.95; }
+.project-subtitle { font-size: 13px; color: var(--text-dim); letter-spacing: 0.02em; }
+.project-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+.project-meta { display: flex; gap: 32px; margin-top: 24px; }
+.project-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.project-meta-label { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.project-meta-value { font-size: 12px; color: var(--text-label); }
+.project-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
+.project-back { font-size: 12px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; letter-spacing: 0.04em; }
+.project-back:hover { color: var(--accent); }
+.project-body { flex: 1; padding: 24px 48px 40px; display: flex; flex-direction: column; gap: 12px; }
+.project-grid { display: grid; gap: 12px; flex: 1; }
+.project-grid.g-1 { grid-template-columns: 1fr; }
+.project-grid.g-2 { grid-template-columns: repeat(2, 1fr); }
+.project-grid.g-3 { grid-template-columns: repeat(3, 1fr); }
+.project-grid.g-2x2 { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto auto; }
+.project-cell { border-radius: 12px; overflow: hidden; background: var(--surface); }
+.project-cell.full { grid-column: 1 / -1; }
+.project-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.project-cell.contain img { object-fit: contain; background: #0a0a0a; }
+.project-cell video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.project-cell.r2 { grid-row: span 2; }
+.project-cell.r3 { grid-row: span 3; }
+.project-section-label { font-size: 10px; color: var(--text-faint); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; }
+/* ── NEBULA FC DETAIL ── */
+.nebula-section-title {
+  font-size: clamp(15px, 1.5vw, 20px); font-weight: 600; color: var(--text-primary);
+  letter-spacing: -0.02em; padding-bottom: 14px; border-bottom: 0.5px solid var(--border);
+}
+.nebula-section-desc {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.85; max-width: 760px;
+}
+.nebula-story-grid {
+  display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: start;
+}
+.nebula-story-text {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.85;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.nebula-symbol-text { padding: 10px 2px 0; }
+.nebula-symbol-name { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.nebula-symbol-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.nebula-jersey-label { font-size: 10px; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+
+@media (max-width: 768px) {
+  .project-top { grid-template-columns: 1fr; padding: 24px 20px 20px; }
+  .project-top-right { padding-left: 0; border-left: none; border-top: 0.5px solid var(--border-subtle); padding-top: 20px; margin-top: 20px; }
+  .project-body { padding: 20px 20px 32px; }
+  .project-grid.g-2, .project-grid.g-3, .project-grid.g-2x2 { grid-template-columns: 1fr; }
+  .project-cell.full { grid-column: 1; }
+}
+
+/* ── PORTFOLIO OVERVIEW ── */
+.portfolio-overview {
+  flex: 1; display: flex; margin-top: 96px; overflow: hidden;
+}
+.po-panel {
+  flex: 1; position: relative; overflow: hidden; cursor: pointer;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 36px 28px; border-right: 0.5px solid var(--border-subtle);
+  transition: flex 0.5s cubic-bezier(0.77,0,0.18,1);
+}
+.po-panel:last-child { border-right: none; }
+.po-panel:hover { flex: 1.5; }
+.po-panel-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: 0.4; transition: opacity 0.5s ease, transform 0.5s ease;
+  background-color: var(--surface);
+}
+.po-panel:hover .po-panel-bg { opacity: 0.55; transform: scale(1.04); }
+.po-panel-bg video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.po-panel-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.75) 100%);
+  transition: background 0.5s ease;
+}
+.po-panel:hover .po-panel-overlay {
+  background: linear-gradient(160deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+}
+.po-panel-top { position: relative; z-index: 1; }
+.po-panel-num {
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mint); margin-bottom: 12px; display: block;
+}
+.po-panel-title {
+  font-size: clamp(22px, 2.2vw, 38px); font-weight: 700; line-height: 1.05;
+  color: #fff; letter-spacing: -0.02em;
+}
+.po-panel-desc {
+  position: relative; z-index: 1;
+  font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.6;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
+}
+.po-panel:hover .po-panel-desc { opacity: 1; transform: translateY(0); }
+.po-panel-arrow {
+  position: absolute; bottom: 36px; right: 28px; z-index: 1;
+  font-size: 18px; color: var(--mint); opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.po-panel:hover .po-panel-arrow { opacity: 1; transform: translate(3px,-3px); }
+
+
+/* ── HOME CAROUSEL ── */
+.home-carousel {
+  position: relative; overflow: hidden; height: 100%;
+  border-left: 0.5px solid var(--border);
+}
+.carousel-track {
+  display: flex; height: 100%;
+  transition: transform 0.65s cubic-bezier(0.77,0,0.18,1);
+  will-change: transform;
+}
+.carousel-slide {
+  flex-shrink: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 40px 36px; position: relative; cursor: pointer;
+  background: var(--surface);
+}
+.carousel-slide-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: 0.38; transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.carousel-slide:hover .carousel-slide-bg { opacity: 0.52; transform: scale(1.03); }
+.carousel-slide-bg video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.carousel-slide-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.15) 60%, transparent 100%);
+}
+.carousel-slide-content { position: relative; z-index: 1; }
+.carousel-slide-cat {
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mint); margin-bottom: 10px; display: block;
+}
+.carousel-slide-title {
+  font-size: clamp(22px, 2.4vw, 34px); font-weight: 700;
+  letter-spacing: -0.02em; color: #fff; line-height: 1.05;
+}
+.carousel-slide-sub {
+  font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 8px; line-height: 1.5;
+}
+.carousel-nav {
+  position: absolute; bottom: 32px; right: 32px; z-index: 10;
+  display: flex; align-items: center; gap: 10px;
+}
+.carousel-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12);
+  color: #888; font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.carousel-btn:hover { background: rgba(199,255,237,0.12); border-color: var(--mint); color: var(--mint); }
+.carousel-dots { display: flex; gap: 6px; align-items: center; }
+.carousel-dot {
+  width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25);
+  transition: background 0.3s, transform 0.3s; cursor: pointer;
+}
+.carousel-dot.active { background: var(--mint); transform: scale(1.6); }
+.carousel-progress {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1.5px;
+  background: rgba(255,255,255,0.06);
+}
+.carousel-progress-bar { height: 100%; background: var(--mint); width: 0%; }
+/* ── ABOUT PHOTO ── */
+.about-photo-wrap {
+  height: 100%; overflow: hidden;
+}
+.about-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+
+.page-indicator { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 200; transition: opacity 0.3s; }
+.page-indicator.hidden { opacity: 0; pointer-events: none; }
+.pi-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted); transition: background 0.3s, transform 0.3s, width 0.3s; cursor: pointer; }
+.pi-dot.active { background: var(--mint); transform: scale(1.4); }
+.page-content { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.page-content.visible { opacity: 1; transform: translateY(0); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 80%{transform:translateX(-3px)} }
+@keyframes tickerAnim { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes tickerAnimReverse { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+
+/* ── LIGHTBOX ── */
+#lightbox {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.92);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#lightbox.open { opacity: 1; pointer-events: all; }
+#lightbox-media {
+  max-width: 90vw; max-height: 88vh;
+  border-radius: 4px; display: block;
+  transform: scale(0.94);
+  transition: transform 0.35s cubic-bezier(0.77,0,0.18,1);
+}
+#lightbox.open #lightbox-media { transform: scale(1); }
+#lightbox-media video { max-width: 90vw; max-height: 88vh; display: block; border-radius: 4px; }
+#lightbox-close {
+  position: absolute; top: 24px; right: 28px;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 0.5px solid rgba(255,255,255,0.2); background: transparent;
+  color: rgba(255,255,255,0.6); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+#lightbox-close:hover { border-color: var(--mint); color: var(--mint); }
+
+/* ── THEME TOGGLE ── */
+.theme-toggle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: transparent; border: 0.5px solid var(--border);
+  color: var(--text-label); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+html.light .icon-moon { display: none; }
+html:not(.light) .icon-sun { display: none; }
+
+/* ── CUSTOM CURSOR ── */
+body { cursor: none; }
+input, textarea { cursor: text; }
+#cursor-dot {
+  position: fixed; width: 5px; height: 5px;
+  background: var(--cursor-dot); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, opacity 0.2s ease;
+  will-change: transform;
+}
+#cursor-ring {
+  position: fixed; width: 30px; height: 30px;
+  border: 1px solid var(--cursor-ring); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s cubic-bezier(0.77,0,0.18,1),
+              height 0.4s cubic-bezier(0.77,0,0.18,1),
+              border-color 0.3s ease, opacity 0.3s ease;
+  will-change: transform;
+}
+body.cursor-hover #cursor-ring {
+  width: 52px; height: 52px;
+  border-color: var(--cursor-ring-hover);
+}
+body.cursor-click #cursor-dot { width: 8px; height: 8px; }
+body.cursor-text #cursor-dot { display: none; }
+body.cursor-text #cursor-ring { opacity: 0; }
+html.light .noise { opacity: 0.06; }
+html.light .carousel-slide-bg { opacity: 0.9; }
+html.light .carousel-slide:hover .carousel-slide-bg { opacity: 0.97; }
+html.light .po-panel-bg { opacity: 0.92; }
+html.light .po-panel:hover .po-panel-bg { opacity: 0.98; }
+html.light .po-panel-overlay,
+html.light .po-panel:hover .po-panel-overlay { background: transparent; }
+html.light .po-panel-title,
+html.light .po-panel-desc,
+html.light .po-panel-num { text-shadow: 0 1px 10px rgba(0,0,0,0.75); }
+html.light .carousel-slide-bg { background-color: var(--surface) !important; }
+html.light .po-panel-bg { background-color: var(--surface) !important; }
+html.light .nav-logo { background: #111111; border-color: rgba(255,255,255,0.12); }
+/* Carousel controls — rgba(white) → dark */
+html.light .carousel-btn {
+  background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.16); color: var(--text-secondary);
+}
+html.light .carousel-btn:hover {
+  background: rgba(0,153,102,0.1); border-color: var(--accent); color: var(--accent);
+}
+html.light .carousel-dot { background: rgba(0,0,0,0.18); }
+html.light .carousel-dot.active { background: var(--accent); }
+html.light .carousel-progress { background: rgba(0,0,0,0.07); }
+html.light .carousel-progress-bar { background: var(--accent); }
+/* Page indicator — point actif */
+html.light .pi-dot.active { background: var(--accent); }
+/* Home — eyebrow line & disc hover */
+html.light .eyebrow-line { background: var(--accent); }
+html.light .disc-item::after { background: var(--accent); }
+html.light .disc-item::before {
+  background: radial-gradient(ellipse at 50% 120%, rgba(0,153,102,0.1) 0%, transparent 70%);
+}
+/* Portfolio — bordure hover carte */
+html.light .portfolio-card:hover { border-color: rgba(0,153,102,0.35); }
+/* À propos — barres compétences & timeline */
+html.light .skill-bar { background: var(--accent); }
+html.light .tl-dot { background: var(--accent); }
+@media (max-width: 900px) {
+  .home-body { grid-template-columns: 1fr; }
+  .home-right { height: 260px; }
+  .disc-strip { grid-template-columns: repeat(3,1fr); }
+  .about-wrap, .contact-wrap { grid-template-columns: 1fr; overflow-y: auto; }
+  .dropdown-menu { left: 0; transform: translateX(0); }
+  .nav-dropdown-wrap:hover .dropdown-menu, .nav-dropdown-wrap.open .dropdown-menu { transform: translateX(0) translateY(0); }
+}
+</style>
+</head>
+<body>
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()">&#10005;</button>
+  <div id="lightbox-media"></div>
+</div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div class="noise"></div>
+<nav class="navbar">
+  <div class="nav-pill">
+    <div class="nav-logo" onclick="goTo(0)" title="Accueil">
+      <img src="ArtByDrez_Logo.png" style="width:28px;height:28px;object-fit:contain;" alt="Art by Drez"/>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" data-page="0" onclick="goTo(0)">Accueil</button>
+      <div class="nav-dropdown-wrap" id="portfolioDropdown">
+        <button class="nav-dropdown-btn" onclick="goTo(1); toggleDropdown();">
+          Portfolio <span class="dropdown-arrow">&#9660;</span>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" onclick="goTo(2); toggleDropdown();" style="cursor:pointer">
+            Identit&#233; visuelle
+            <span class="dropdown-item-num">01</span>
+          </a>
+          <a class="dropdown-item" onclick="goTo(3); toggleDropdown();" style="cursor:pointer">
+            Design sportif
+            <span class="dropdown-item-num">02</span>
+          </a>
+          <a class="dropdown-item" onclick="goTo(4); toggleDropdown();" style="cursor:pointer">
+            Motion design
+            <span class="dropdown-item-num">03</span>
+          </a>
+          <a class="dropdown-item" onclick="goTo(5); toggleDropdown();" style="cursor:pointer">
+            Travail de fin d&#39;&#233;tude
+            <span class="dropdown-item-num">04</span>
+          </a>
+        </div>
+      </div>
+      <button class="nav-link" data-page="6" onclick="goTo(6)">À propos</button>
+      <button class="nav-link" data-page="7" onclick="goTo(7)">Contact</button>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
+      <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+    <button class="nav-cta" onclick="goTo(7)">
+      <span class="status-dot"></span>Disponible
+    </button>
+  </div>
+</nav>
+<a class="insta-fixed" href="https://www.instagram.com/art.by.drez/" target="_blank">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+</a>
+<div class="slider slide-0" id="slider">
+  <section class="page" id="page-home">
+    <div class="home-body page-content visible">
+      <div class="home-left">
+        <p class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-word" data-text="Infographiste">Infographiste</span></p>
+        <div>
+          <h1 class="home-title">
+            <span class="t-first">Loris</span>
+            <span class="t-last">Fauville</span>
+          </h1>
+        </div>
+        <div class="home-bottom">
+          <p class="home-desc">
+            Graphiste passionn&#233;, je cr&#233;e des visuels clairs et percutants, toujours avec le souci du d&#233;tail. Parce que chaque projet m&#233;rite une touche finale&#8230; parfois nomm&#233;e <em>&#8220;version_finale_2_V26&#8221;</em>.
+          </p>
+          <div class="cta-group">
+            <button class="btn-mint" onclick="goTo(7)">Me contacter &#8594;</button>
+            <span class="scroll-hint" onclick="goTo(6)">A propos &#8599;</span>
+          </div>
+        </div>
+      </div>
+      <div class="home-carousel" id="homeCarousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-slide" onclick="goTo(2)">
+            <div class="carousel-slide-bg" style="background-image:url('dwello/Dwello_couverture_ANIM.jpg');background-size:cover;background-position:center;"></div>
+            <div class="carousel-slide-overlay"></div>
+            <div class="carousel-slide-content">
+              <span class="carousel-slide-cat">01 — Identité visuelle</span>
+              <h3 class="carousel-slide-title">Logo &amp;<br>Charte graphique</h3>
+              <p class="carousel-slide-sub">Sans ça, ta marque sort en pyjama.</p>
+            </div>
+          </div>
+          <div class="carousel-slide" onclick="goTo(3)">
+            <div class="carousel-slide-bg" style="background-image:url('https://artbydrez.com/wp-content/uploads/2025/04/Dembele-819x1024.png');background-size:cover;background-position:center top;"></div>
+            <div class="carousel-slide-overlay"></div>
+            <div class="carousel-slide-content">
+              <span class="carousel-slide-cat">02 — Design sportif</span>
+              <h3 class="carousel-slide-title">Visuels<br>de club &amp; événement</h3>
+              <p class="carousel-slide-sub">Visuels qui donnent envie de scorer.</p>
+            </div>
+          </div>
+          <div class="carousel-slide" onclick="goTo(4)">
+            <div class="carousel-slide-bg">
+              <video autoplay loop muted playsinline poster="fomo/FOMO_Propre.png">
+                <source src="https://artbydrez.com/wp-content/uploads/2025/09/FOMO_Propre-1.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="carousel-slide-overlay"></div>
+            <div class="carousel-slide-content">
+              <span class="carousel-slide-cat">03 — Motion design</span>
+              <h3 class="carousel-slide-title">Animations<br>&amp; clips</h3>
+              <p class="carousel-slide-sub">Clips qui donnent envie de replay.</p>
+            </div>
+          </div>
+          <div class="carousel-slide" onclick="goTo(5)">
+            <div class="carousel-slide-bg" style="background-image:url('https://artbydrez.com/wp-content/uploads/2025/08/Logo_800X800.png');background-size:cover;background-position:center;background-color:#0a0a0a;"></div>
+            <div class="carousel-slide-overlay"></div>
+            <div class="carousel-slide-content">
+              <span class="carousel-slide-cat">04 — Travail de fin d'étude</span>
+              <h3 class="carousel-slide-title">Création<br>d'un club fictif</h3>
+              <p class="carousel-slide-sub">De A à Z — identité, maillots, communication.</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-nav">
+          <div class="carousel-dots" id="carouselDots">
+            <div class="carousel-dot active" onclick="carouselGo(0)"></div>
+            <div class="carousel-dot" onclick="carouselGo(1)"></div>
+            <div class="carousel-dot" onclick="carouselGo(2)"></div>
+            <div class="carousel-dot" onclick="carouselGo(3)"></div>
+          </div>
+          <button class="carousel-btn" onclick="carouselGo(carouselIdx-1)">&#8592;</button>
+          <button class="carousel-btn" onclick="carouselGo(carouselIdx+1)">&#8594;</button>
+        </div>
+        <div class="carousel-progress"><div class="carousel-progress-bar" id="carouselBar"></div></div>
+      </div>
+    </div>
+    <div class="ticker">
+      <div class="ticker-inner">
+        <span class="t-word">Identit&#233; visuelle</span><span class="t-sep">&middot;</span>After Effects<span class="t-sep">&middot;</span><span class="t-word">Design sportif</span><span class="t-sep">&middot;</span>Charleroi<span class="t-sep">&middot;</span><span class="t-word">Motion design</span><span class="t-sep">&middot;</span>Illustrator<span class="t-sep">&middot;</span><span class="t-word">Branding</span><span class="t-sep">&middot;</span>Figma<span class="t-sep">&middot;</span><span class="t-word">UI&nbsp;/&nbsp;UX</span><span class="t-sep">&middot;</span>Belgique<span class="t-sep">&middot;</span><span class="t-word">Identit&#233; visuelle</span><span class="t-sep">&middot;</span>After Effects<span class="t-sep">&middot;</span><span class="t-word">Design sportif</span><span class="t-sep">&middot;</span>Charleroi<span class="t-sep">&middot;</span><span class="t-word">Motion design</span><span class="t-sep">&middot;</span>Illustrator<span class="t-sep">&middot;</span><span class="t-word">Branding</span><span class="t-sep">&middot;</span>Figma<span class="t-sep">&middot;</span><span class="t-word">UI&nbsp;/&nbsp;UX</span><span class="t-sep">&middot;</span>Belgique<span class="t-sep">&middot;</span>
+      </div>
+    </div>
+  </section>
+  <!-- PAGE 1 — PORTFOLIO OVERVIEW -->
+  <section class="page" id="page-portfolio-overview">
+    <div class="portfolio-overview page-content">
+      <div class="po-panel" onclick="goTo(2)">
+        <div class="po-panel-bg" style="background-image:url('dwello/Dwello_couverture_ANIM.jpg');"></div>
+        <div class="po-panel-overlay"></div>
+        <div class="po-panel-top">
+          <span class="po-panel-num">01</span>
+          <h2 class="po-panel-title">Identit&#233;<br>visuelle</h2>
+        </div>
+        <p class="po-panel-desc">Sans &#231;a, ta marque sort en pyjama.</p>
+        <span class="po-panel-arrow">&#8599;</span>
+      </div>
+      <div class="po-panel" onclick="goTo(3)">
+        <div class="po-panel-bg" style="background-image:url('https://artbydrez.com/wp-content/uploads/2025/04/Dembele-819x1024.png');background-position:center top;"></div>
+        <div class="po-panel-overlay"></div>
+        <div class="po-panel-top">
+          <span class="po-panel-num">02</span>
+          <h2 class="po-panel-title">Design<br>sportif</h2>
+        </div>
+        <p class="po-panel-desc">Visuels qui donnent envie de scorer.</p>
+        <span class="po-panel-arrow">&#8599;</span>
+      </div>
+      <div class="po-panel" onclick="goTo(4)">
+        <div class="po-panel-bg">
+          <video autoplay loop muted playsinline poster="fomo/FOMO_Propre.png">
+            <source src="https://artbydrez.com/wp-content/uploads/2025/09/FOMO_Propre-1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="po-panel-overlay"></div>
+        <div class="po-panel-top">
+          <span class="po-panel-num">03</span>
+          <h2 class="po-panel-title">Motion<br>design</h2>
+        </div>
+        <p class="po-panel-desc">Clips qui donnent envie de replay.</p>
+        <span class="po-panel-arrow">&#8599;</span>
+      </div>
+      <div class="po-panel" onclick="goTo(5)">
+        <div class="po-panel-bg" style="background-image:url('https://artbydrez.com/wp-content/uploads/2025/08/Logo_800X800.png');background-color:#0a0a0a;"></div>
+        <div class="po-panel-overlay"></div>
+        <div class="po-panel-top">
+          <span class="po-panel-num">04</span>
+          <h2 class="po-panel-title">Travail<br>de fin<br>d&#39;&#233;tude</h2>
+        </div>
+        <p class="po-panel-desc">Cr&#233;ation d&#39;un club fictif.</p>
+        <span class="po-panel-arrow">&#8599;</span>
+      </div>
+    </div>
+  </section>
+  <section class="page" id="page-portfolio-identite">
+    <div class="portfolio-wrap page-content">
+      <div class="portfolio-header">
+        <div>
+          <p class="portfolio-label">Portfolio</p>
+          <h2 class="portfolio-title">Identit&#233; <span>visuelle</span></h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:32px">
+          <span class="portfolio-count">03 projets</span>
+          <span class="portfolio-back" onclick="goTo(1)">&#8592; Retour</span>
+        </div>
+      </div>
+      <div class="portfolio-grid pg-identite">
+        <div class="portfolio-card" onclick="goTo(8)">
+          <div class="portfolio-card-bg"><img src="dwello/Dwello_couverture_ANIM.jpg" alt="Dwello"></div>
+          <div class="portfolio-card-inner"><p class="portfolio-card-tag">UI / Branding</p><p class="portfolio-card-name">Dwello &#8212; Plateforme de r&#233;servation</p></div>
+        </div>
+        <div class="portfolio-card" onclick="goTo(9)">
+          <div class="portfolio-card-bg"><img src="fomo/FOMO_Propre.png" alt="FOMO"></div>
+          <div class="portfolio-card-inner"><p class="portfolio-card-tag">Branding</p><p class="portfolio-card-name">FOMO &#8212; Boisson &#233;nergisante</p></div>
+        </div>
+        <div class="portfolio-card" onclick="goTo(10)">
+          <div class="portfolio-card-bg"><img src="Spark/SPARK_Logo.jpg" alt="SPARK"></div>
+          <div class="portfolio-card-inner"><p class="portfolio-card-tag">Branding</p><p class="portfolio-card-name">SPARK &#8212; Marque de sport</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="page" id="page-portfolio-sport">
+    <div class="portfolio-wrap page-content">
+      <div class="portfolio-header">
+        <div>
+          <p class="portfolio-label">Portfolio</p>
+          <h2 class="portfolio-title">Design <span>sportif</span></h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:32px">
+          <span class="portfolio-count">11 visuels</span>
+          <span class="portfolio-back" onclick="goTo(1)">&#8592; Retour</span>
+        </div>
+      </div>
+      <div class="portfolio-grid pg-sport">
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2025/04/Dembele-819x1024.png" alt="Dembel&#233; — PSG" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Dembel&#233; — PSG</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2025/01/RAFA-819x1024.jpg" alt="Rafael Le&#227;o — Milan AC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Rafael Le&#227;o — Milan AC</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2024/12/Madueke-1-819x1024.png" alt="Madueke — Chelsea" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Madueke — Chelsea</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2024/12/Tonali-819x1024.jpg" alt="Tonali" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Tonali</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2024/12/Ronaldinho-819x1024.jpg" alt="Ronaldinho" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Ronaldinho</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2024/12/Maignan-819x1024.jpg" alt="Maignan — Milan AC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Maignan — Milan AC</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2025/04/Kean-819x1024.png" alt="Kean" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Kean</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2025/09/Barcola-819x1024.png" alt="Barcola — PSG" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Barcola — PSG</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2024/12/ACM-JUVE-819x1024.jpg" alt="AC Milan vs Juventus" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">AC Milan vs Juventus</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2024/12/Gyokeres-V5-819x1024.jpg" alt="Gy&#246;keres" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Gy&#246;keres</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2025/07/saelemaekers-1024x1024.jpeg" alt="Saelemaekers" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Saelemaekers</p></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="page" id="page-portfolio-motion">
+    <div class="portfolio-wrap page-content">
+      <div class="portfolio-header">
+        <div>
+          <p class="portfolio-label">Portfolio</p>
+          <h2 class="portfolio-title">Motion <span>design</span></h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:32px">
+          <span class="portfolio-count">04 vid&#233;os</span>
+          <span class="portfolio-back" onclick="goTo(1)">&#8592; Retour</span>
+        </div>
+      </div>
+      <div class="portfolio-grid pg-motion">
+        <div class="portfolio-card card-video">
+          <div class="portfolio-card-bg">
+            <video autoplay loop muted playsinline poster="fomo/FOMO_Propre.png">
+              <source src="https://artbydrez.com/wp-content/uploads/2025/09/FOMO_Propre-1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="portfolio-card-inner">
+            <p class="portfolio-card-tag">Publicit&#233;</p>
+            <p class="portfolio-card-name">FOMO &#8212; Spot publicitaire</p>
+          </div>
+        </div>
+        <div class="portfolio-card card-video">
+          <div class="portfolio-card-bg">
+            <video autoplay loop muted playsinline>
+              <source src="https://artbydrez.com/wp-content/uploads/2025/05/ArtByDrez_LogoV2.webm" type="video/webm">
+            </video>
+          </div>
+          <div class="portfolio-card-inner">
+            <p class="portfolio-card-tag">Animation logo</p>
+            <p class="portfolio-card-name">ArtByDrez &#8212; Animation logo</p>
+          </div>
+        </div>
+        <div class="portfolio-card card-video">
+          <div class="portfolio-card-bg">
+            <video autoplay loop muted playsinline poster="Spark/SPARK_Logo.jpg">
+              <source src="https://artbydrez.com/wp-content/uploads/2025/09/SPARK_Logo_3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="portfolio-card-inner">
+            <p class="portfolio-card-tag">Animation logo</p>
+            <p class="portfolio-card-name">SPARK &#8212; Animation logo</p>
+          </div>
+        </div>
+        <div class="portfolio-card card-video">
+          <div class="portfolio-card-bg">
+            <video autoplay loop muted playsinline>
+              <source src="https://artbydrez.com/wp-content/uploads/2025/09/Fichier-anim-logo_1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="portfolio-card-inner">
+            <p class="portfolio-card-tag">Animation logo</p>
+            <p class="portfolio-card-name">Nebula FC &#8212; Animation logo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- PAGE 6 — TRAVAIL DE FIN D'ÉTUDE -->
+  <section class="page" id="page-portfolio-tfe">
+    <div class="portfolio-wrap page-content">
+      <div class="portfolio-header">
+        <div>
+          <p class="portfolio-label">Portfolio</p>
+          <h2 class="portfolio-title">Travail de <span>fin d&#39;&#233;tude</span></h2>
+          <p class="portfolio-subtitle">Nebula FC &#8212; cr&#233;ation compl&#232;te d&#39;un club fictif&nbsp;: identit&#233; visuelle, print, packaging, r&#233;seaux sociaux et motion.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:32px">
+          <span class="portfolio-count">18 cr&#233;ations</span>
+          <span class="portfolio-back" onclick="goTo(1)">&#8592; Retour</span>
+        </div>
+      </div>
+      <div class="tfe-wrap">
+
+        <!-- 01 — Identité visuelle : logo hero (2/3) + annonce (1/3) -->
+        <div class="tfe-section">
+          <p class="s-label">01 &#8212; Identit&#233; visuelle</p>
+          <h3 class="s-title">Le blason Nebula FC</h3>
+          <p class="s-desc">Refonte compl&#232;te de l&#39;embl&#232;me pour la saison 25-26&nbsp;: un blason circulaire orange &#224; la tour stylis&#233;e, annonc&#233; aux supporters via les r&#233;seaux.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="https://artbydrez.com/wp-content/uploads/2025/08/Logo_800X800.png" alt="Logo officiel Nebula FC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Identit&#233; visuelle</p><p class="portfolio-card-name">Blason officiel du club</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Nouveau-logo_Insta.jpg" alt="Annonce nouveau logo" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Annonce</p><p class="portfolio-card-name">Avant / apr&#232;s &#8212; le nouveau blason</p></div></div>
+        </div>
+
+        <!-- 02 — Symbolique : 3 colonnes égales -->
+        <div class="tfe-section">
+          <p class="s-label">02 &#8212; La symbolique du blason</p>
+          <h3 class="s-title">Un embl&#232;me ancr&#233; dans la ville</h3>
+          <p class="s-desc">Chaque &#233;l&#233;ment du blason raconte l&#39;histoire du club et de sa ville&nbsp;: 1988, l&#39;ann&#233;e de fondation de l&#39;&#233;quipe&nbsp;; les trois tours, symbole historique de la ville&nbsp;; et les avions, h&#233;ritage de son pass&#233; a&#233;ronautique.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/1988-scaled.jpg" alt="Blason &#8212; ann&#233;e de fondation 1988" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Symbolique</p><p class="portfolio-card-name">1988 &#8212; l&#39;ann&#233;e de fondation du club</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Tour-scaled.jpg" alt="Blason &#8212; les trois tours de la ville" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Symbolique</p><p class="portfolio-card-name">Les trois tours &#8212; symbole historique de la ville</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Avion-scaled.jpg" alt="Blason &#8212; h&#233;ritage a&#233;ronautique" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Symbolique</p><p class="portfolio-card-name">Les avions &#8212; h&#233;ritage a&#233;ronautique de la ville</p></div></div>
+        </div>
+
+        <!-- 03 — Maillots : 2 vidéos 9/16 côte à côte -->
+        <div class="tfe-section">
+          <p class="s-label">03 &#8212; Les maillots 25/26</p>
+          <h3 class="s-title">Domicile &amp; ext&#233;rieur en motion</h3>
+          <p class="s-desc">Les deux maillots de la saison d&#233;voil&#233;s en motion design&nbsp;: une animation de reveal d&#233;di&#233;e pour le maillot domicile et pour le maillot ext&#233;rieur.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="portfolio-card card-video" style="aspect-ratio:4/3;"><div class="portfolio-card-bg"><video autoplay loop muted playsinline poster="Nebula fc/Flyers-maillot_1-scaled.jpg"><source src="Nebula%20fc/Maillot-domicile.webm" type="video/webm"></video></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Motion</p><p class="portfolio-card-name">Reveal &#8212; maillot domicile</p></div></div>
+          <div class="portfolio-card card-video" style="aspect-ratio:4/3;"><div class="portfolio-card-bg"><video autoplay loop muted playsinline poster="Nebula fc/Flyers-maillot_2-scaled.jpg"><source src="Nebula%20fc/Maillot-exterieur.webm" type="video/webm"></video></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Motion</p><p class="portfolio-card-name">Reveal &#8212; maillot ext&#233;rieur</p></div></div>
+        </div>
+
+        <!-- 04 — Spot pub : carte centré en featured -->
+        <div class="tfe-section">
+          <p class="s-label">04 &#8212; Spot publicitaire</p>
+          <h3 class="s-title">La campagne maillots en vid&#233;o</h3>
+          <p class="s-desc">Un spot publicitaire en motion design pour annoncer la sortie des nouveaux maillots de la saison.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="portfolio-card card-video" style="aspect-ratio:4/3;"><div class="portfolio-card-bg"><video autoplay loop muted playsinline><source src="Nebula%20fc/PUB_Maillot.webm" type="video/webm"></video></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Motion</p><p class="portfolio-card-name">Spot publicitaire maillot</p></div></div>
+        </div>
+
+        <!-- 05 — Flyers & collection : 3 colonnes -->
+        <div class="tfe-section">
+          <p class="s-label">05 &#8212; Flyers &amp; collection</p>
+          <h3 class="s-title">Supports de lancement des maillots</h3>
+          <p class="s-desc">Les flyers de lancement domicile et ext&#233;rieur, et la collection compl&#232;te des maillots pr&#233;sent&#233;e ensemble.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Flyers-maillot_1-scaled.jpg" alt="Flyer maillot domicile" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">Flyer de lancement &#8212; domicile</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Flyers-maillot_2-scaled.jpg" alt="Flyer maillot ext&#233;rieur" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">Flyer de lancement &#8212; ext&#233;rieur</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/flyers-maillots-pdf.jpg" alt="Collection maillots" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">Collection compl&#232;te des maillots</p></div></div>
+        </div>
+
+        <!-- 06 — Print & événementiel : 4 colonnes (adapté au nombre) -->
+        <div class="tfe-section">
+          <p class="s-label">06 &#8212; Print &amp; &#233;v&#233;nementiel</p>
+          <h3 class="s-title">Du stade au papier</h3>
+          <p class="s-desc">Les supports physiques du club&nbsp;: d&#233;pliant de la journ&#233;e de d&#233;tection &#224; la Nebula Arena, ticket de match, carte d&#39;abonnement et flyer ext&#233;rieur.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Flyers_Stage-scaled.jpg" alt="D&#233;pliant stage de d&#233;tection" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">D&#233;pliant &#8212; stage de d&#233;tection</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Ticket_Match-scaled.jpg" alt="Ticket de match" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">Ticket de match</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Abonnement_mockup-scaled.jpg" alt="Carte d&#39;abonnement" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">Carte d&#39;abonnement</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Flyers_EXT-scaled.jpg" alt="Flyer ext&#233;rieur" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Print</p><p class="portfolio-card-name">Flyer ext&#233;rieur</p></div></div>
+        </div>
+
+        <!-- 07 — Communication digitale : 3 colonnes -->
+        <div class="tfe-section">
+          <p class="s-label">07 &#8212; Communication digitale</p>
+          <h3 class="s-title">Le club sur Instagram</h3>
+          <p class="s-desc">La ligne graphique d&#233;clin&#233;e en contenus social media&nbsp;: annonce du coach Takeshi Moriyama, composition d&#39;&#233;quipe du jour de match et aper&#231;u du feed Instagram.</p>
+        </div>
+        <div class="tfe-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Visuel-entraineur-1.jpg" alt="Post annonce du coach" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">R&#233;seaux sociaux</p><p class="portfolio-card-name">Annonce du coach &#8212; Moriyama</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Composition-scaled-e1760961746600.jpg" alt="Composition d&#39;&#233;quipe" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">R&#233;seaux sociaux</p><p class="portfolio-card-name">Composition d&#39;&#233;quipe &#8212; 4-3-3</p></div></div>
+          <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Nebula%20fc/Visuel_Insta-scaled.jpg" alt="Aper&#231;u du feed Instagram" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">R&#233;seaux sociaux</p><p class="portfolio-card-name">Aper&#231;u du feed Instagram</p></div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+    <section class="page" id="page-about">
+    <div class="about-wrap page-content">
+      <div class="about-left">
+        <div class="about-photo-wrap"><img src="photo_site.png" alt="Loris Fauville"/></div>
+      </div>
+      <div class="about-right">
+        <div>
+          <p class="about-label">À propos</p>
+          <h2 class="about-title">Design<br>avec <span>intention.</span></h2>
+          <div class="about-body">
+            <p>Je suis <strong>Loris Fauville</strong>, infographiste et graphiste bas&#233; dans la r&#233;gion de Charleroi.</p>
+            <p>Je con&#231;ois des <strong>identit&#233;s visuelles</strong> qui d&#233;finissent l'image d'une marque, j'&#233;labore des <strong>designs sportifs</strong> adapt&#233;s aux clubs et aux &#233;v&#233;nements, et je r&#233;alise du <strong>motion design</strong> pour donner mouvement et rythme aux projets.</p>
+            <p>Toujours avec le souci du d&#233;tail &#8212; et une obsession pour les fichiers bien nomm&#233;s.</p>
+          </div>
+        </div>
+        <div>
+          <p class="about-section-title">Parcours</p>
+          <div class="timeline">
+            <div class="tl-item">
+              <span class="tl-year">2025</span>
+              <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+              <div class="tl-body">
+                <p class="tl-place">Stage en infographie &#8212; OVATION Studio</p>
+                <p class="tl-desc">Stage professionnel au sein de l'entreprise OVATION Studio</p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <span class="tl-year">2025</span>
+              <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+              <div class="tl-body">
+                <p class="tl-place">Institut Provincial Sup&#233;rieur Henri La Fontaine</p>
+                <p class="tl-desc">Obtention du dipl&#244;me d'infographiste</p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <span class="tl-year">2019</span>
+              <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+              <div class="tl-body">
+                <p class="tl-place">Institut Sainte Marie &#8212; Ch&#226;telet</p>
+                <p class="tl-desc">Obtention du CESS artistique</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-cta">
+          <button class="btn-mint" onclick="goTo(7)">Travailler ensemble &#8594;</button>
+          <button class="btn-outline" onclick="goTo(1)">Voir le portfolio</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="page" id="page-contact">
+    <div class="contact-wrap page-content">
+      <div class="contact-left">
+        <div>
+          <p class="contact-label">Contact</p>
+          <h2 class="contact-title">Parlons de<br>votre <span>projet.</span></h2>
+          <p class="contact-sub">Un projet en t&#234;te ? Une collaboration &#224; explorer ? &#201;crivez-moi, je r&#233;ponds rapidement.</p>
+        </div>
+        <div class="contact-links">
+          <a class="contact-link-row" href="mailto:info@artbydrez.com">
+            <span class="link-label">Email</span><span class="link-val">info@artbydrez.com</span><span class="link-arrow">&#8599;</span>
+          </a>
+          <a class="contact-link-row" href="tel:0478122573">
+            <span class="link-label">T&#233;l&#233;phone</span><span class="link-val">0478 12 25 73</span><span class="link-arrow">&#8599;</span>
+          </a>
+          <a class="contact-link-row" href="https://www.instagram.com/art.by.drez/" target="_blank">
+            <span class="link-label">Instagram</span><span class="link-val">@art.by.drez</span><span class="link-arrow">&#8599;</span>
+          </a>
+          <a class="contact-link-row" href="https://www.behance.net/lorisfauville3" target="_blank">
+            <span class="link-label">Behance</span><span class="link-val">lorisfauville3</span><span class="link-arrow">&#8599;</span>
+          </a>
+          <a class="contact-link-row" href="https://www.linkedin.com/in/loris-fauville-6b0992338/" target="_blank">
+            <span class="link-label">LinkedIn</span><span class="link-val">Loris Fauville</span><span class="link-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-right">
+        <p class="form-label">Envoyer un message</p>
+        <form onsubmit="handleForm(event)">
+          <div class="form-group"><label>Votre nom</label><input type="text" placeholder="Votre nom" required /></div>
+          <div class="form-group"><label>Email</label><input type="email" placeholder="votre@email.com" required /></div>
+          <div class="form-group"><label>Votre projet</label><textarea placeholder="D&#233;crivez votre projet en quelques lignes&#8230;"></textarea></div>
+          <button type="submit" class="form-submit">Envoyer le message &#8594;</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 9 — DWELLO -->
+  <section class="page" id="page-project-dwello">
+    <div class="project-wrap page-content">
+      <div class="project-top">
+        <div class="project-top-left">
+          <p class="project-tag">UI / Branding</p>
+          <h2 class="project-title">Dwello</h2>
+          <p class="project-subtitle">Plateforme de r&#233;servation</p>
+        </div>
+        <div class="project-top-right">
+          <p class="project-desc">Dwello est une plateforme de logement moderne qui aide les jeunes adultes &#224; trouver des endroits simples et &#233;l&#233;gants o&#249; vivre en ville.</p>
+          <div class="project-meta">
+            <div class="project-meta-item">
+              <span class="project-meta-label">Ann&#233;e</span>
+              <span class="project-meta-value">2025</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Cat&#233;gorie</span>
+              <span class="project-meta-value">UI Design &amp; Branding</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Outils</span>
+              <span class="project-meta-value">Figma</span>
+            </div>
+          </div>
+          <div class="project-nav">
+            <span class="project-back" onclick="goTo(2)">&#8592; Retour identit&#233; visuelle</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-grid" style="grid-template-columns:repeat(6,1fr);">
+          <!-- Identité : logo + texte + mockup téléphone -->
+          <div class="project-cell" style="grid-column:span 2;aspect-ratio:1/1;">
+            <img src="dwello/Dwello_couverture_ANIM.jpg" alt="Dwello &#8212; Mockup app">
+          </div>
+          <div class="project-cell text-cell" style="grid-column:span 2;">
+            <p class="cell-label">Identit&#233; visuelle</p>
+            <p class="cell-heading">Un logo ancr&#233; dans la modernit&#233; urbaine</p>
+            <p class="cell-body">Le logo Dwello traduit l&#39;id&#233;e de chez-soi en ville &#8212; formes simples, typographie claire, une identit&#233; imm&#233;diatement reconnaissable.</p>
+          </div>
+          <div class="project-cell contain" style="grid-column:span 2;aspect-ratio:1/1;background:#090d12;">
+            <img src="dwello/Dwello_APP_Logo.jpg" alt="Dwello &#8212; Logo">
+          </div>
+          <!-- Interface -->
+          <div class="project-cell" style="grid-column:span 2;aspect-ratio:4/3;">
+            <img src="dwello/Dwello_Carousel_1.jpg" alt="Dwello &#8212; Interface 1">
+          </div>
+          <div class="project-cell" style="grid-column:span 2;aspect-ratio:4/3;">
+            <img src="dwello/Dwello_Carousel_2.jpg" alt="Dwello &#8212; Interface 2">
+          </div>
+          <div class="project-cell" style="grid-column:span 2;aspect-ratio:4/3;">
+            <img src="dwello/Dwello_Carousel_3.jpg" alt="Dwello &#8212; Interface 3">
+          </div>
+          <!-- Motion : texte éditorial + vidéo -->
+          <div class="project-cell text-cell" style="grid-column:span 2;">
+            <p class="cell-label">Motion</p>
+            <p class="cell-heading">Identit&#233; en mouvement</p>
+            <p class="cell-body">Une animation de marque con&#231;ue pour refl&#233;ter la fluidit&#233; et la modernit&#233; de la plateforme Dwello.</p>
+          </div>
+          <div class="project-cell" style="grid-column:span 4;aspect-ratio:16/9;">
+            <video autoplay loop muted playsinline>
+              <source src="https://artbydrez.com/wp-content/uploads/2025/10/Dwello_animfichier_2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <!-- Produit -->
+          <div class="project-cell" style="grid-column:span 3;aspect-ratio:4/3;">
+            <img src="dwello/Dwello_APP.jpg" alt="Dwello &#8212; Application">
+          </div>
+          <div class="project-cell" style="grid-column:span 3;aspect-ratio:4/3;">
+            <img src="dwello/Dwello_Buy.jpg" alt="Dwello &#8212; R&#233;servation">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 10 — FOMO -->
+  <section class="page" id="page-project-fomo">
+    <div class="project-wrap page-content">
+      <div class="project-top">
+        <div class="project-top-left">
+          <p class="project-tag">Branding</p>
+          <h2 class="project-title">FOMO</h2>
+          <p class="project-subtitle">Boisson &#233;nergisante</p>
+        </div>
+        <div class="project-top-right">
+          <p class="project-desc">FOMO est une marque de boissons &#233;nergisantes audacieuses con&#231;ue pour les f&#234;tards qui ne veulent jamais manquer un moment.</p>
+          <div class="project-meta">
+            <div class="project-meta-item">
+              <span class="project-meta-label">Ann&#233;e</span>
+              <span class="project-meta-value">2025</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Cat&#233;gorie</span>
+              <span class="project-meta-value">Branding &amp; Motion</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Outils</span>
+              <span class="project-meta-value">Illustrator · After Effects</span>
+            </div>
+          </div>
+          <div class="project-nav">
+            <span class="project-back" onclick="goTo(2)">&#8592; Retour identit&#233; visuelle</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-grid" style="grid-template-columns:repeat(3,1fr);">
+          <!-- Identité : texte + logo + packaging -->
+          <div class="project-cell text-cell">
+            <p class="cell-label">Branding</p>
+            <p class="cell-heading">Une marque pour ceux qui ne veulent rien manquer</p>
+            <p class="cell-body">Identit&#233; visuelle audacieuse con&#231;ue autour du concept FOMO &#8212; Fear Of Missing Out. Couleurs vives, typographie percutante, packaging immersif.</p>
+          </div>
+          <div class="project-cell contain" style="aspect-ratio:3/4;background:#0a0a0a;">
+            <img src="fomo/FOMO_Propre.png" alt="FOMO &#8212; Logo">
+          </div>
+          <div class="project-cell contain" style="aspect-ratio:3/4;background:#0f0f0f;">
+            <img src="fomo/PackagingFOMO_2.jpg" alt="FOMO &#8212; Pack 6 canettes">
+          </div>
+          <!-- Packaging + motion -->
+          <div class="project-cell contain" style="aspect-ratio:4/3;background:#0f0f0f;">
+            <img src="fomo/PackagingFOMO_1.jpg" alt="FOMO &#8212; Stay Lit">
+          </div>
+          <div class="project-cell contain" style="aspect-ratio:4/3;background:#0a0a0a;">
+            <img src="fomo/FOMO_MAin.png" alt="FOMO &#8212; Canette">
+          </div>
+          <div class="project-cell text-cell" style="aspect-ratio:4/3;">
+            <p class="cell-label">Motion</p>
+            <p class="cell-heading">Spot publicitaire</p>
+            <p class="cell-body">Animation con&#231;ue pour les r&#233;seaux sociaux &#8212; dynamique, color&#233;e, taill&#233;e pour capter l&#39;attention en moins de 3 secondes.</p>
+          </div>
+          <!-- Vidéo pleine largeur -->
+          <div class="project-cell full" style="aspect-ratio:16/9;">
+            <video autoplay loop muted playsinline>
+              <source src="fomo/FOMO_Propre.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 11 — SPARK -->
+  <section class="page" id="page-project-spark">
+    <div class="project-wrap page-content">
+      <div class="project-top">
+        <div class="project-top-left">
+          <p class="project-tag">Branding</p>
+          <h2 class="project-title">SPARK</h2>
+          <p class="project-subtitle">Marque de sport</p>
+        </div>
+        <div class="project-top-right">
+          <p class="project-desc">Spark est une marque de v&#234;tements bas&#233;e dans le domaine du sport.</p>
+          <div class="project-meta">
+            <div class="project-meta-item">
+              <span class="project-meta-label">Ann&#233;e</span>
+              <span class="project-meta-value">2025</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Cat&#233;gorie</span>
+              <span class="project-meta-value">Branding &amp; Motion</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Outils</span>
+              <span class="project-meta-value">Illustrator · After Effects</span>
+            </div>
+          </div>
+          <div class="project-nav">
+            <span class="project-back" onclick="goTo(2)">&#8592; Retour identit&#233; visuelle</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-grid" style="grid-template-columns:repeat(3,1fr);align-items:stretch;">
+          <!-- Logo — hero pleine largeur -->
+          <div class="project-cell contain" style="grid-column:span 3;aspect-ratio:16/5;background:#0a0a0a;">
+            <img src="Spark/SPARK_Logo.jpg" alt="SPARK &#8212; Logo">
+          </div>
+          <!-- Vidéo + texte marque + T-shirt -->
+          <div class="project-cell" style="aspect-ratio:1/1;">
+            <video autoplay loop muted playsinline>
+              <source src="Spark/SPARK_Logo_1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="project-cell text-cell">
+            <p class="cell-label">Branding</p>
+            <p class="cell-heading">L&#39;&#233;nergie du sport, captur&#233;e en une marque</p>
+            <p class="cell-body">SPARK est une marque de v&#234;tements sportifs con&#231;ue pour incarner la performance et le mouvement &#8212; du logo aux visuels &#233;v&#233;nementiels.</p>
+          </div>
+          <div class="project-cell contain" style="aspect-ratio:1/1;background:#0f0f0f;">
+            <img src="Spark/Tshirt_Spark.jpg" alt="SPARK &#8212; T-shirt">
+          </div>
+          <!-- Visuels sport — 3 carrés -->
+          <div class="project-cell contain" style="aspect-ratio:1/1;background:#0f0f0f;">
+            <img src="Spark/Spark_Visuel tennis.jpg" alt="SPARK &#8212; Tennis">
+          </div>
+          <div class="project-cell contain" style="aspect-ratio:1/1;background:#0f0f0f;">
+            <img src="Spark/Spark_Visuel_run.jpg" alt="SPARK &#8212; Running">
+          </div>
+          <div class="project-cell contain" style="aspect-ratio:1/1;background:#0f0f0f;">
+            <img src="Spark/Affiche.jpg" alt="SPARK &#8212; Affiche">
+          </div>
+          <!-- Print & produit -->
+          <div class="project-cell text-cell">
+            <p class="cell-label">Print &amp; Produit</p>
+            <p class="cell-heading">Du visuel &#224; l&#39;objet</p>
+            <p class="cell-body">Affiche &#233;v&#233;nementielle et packaging con&#231;us dans la continuit&#233; de l&#39;identit&#233; SPARK.</p>
+          </div>
+          <div class="project-cell contain" style="grid-column:span 2;aspect-ratio:2/1;background:#0f0f0f;">
+            <img src="Spark/Bottle.jpg" alt="SPARK &#8212; Bouteille">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 12 — NEBULA FC -->
+  <section class="page" id="page-project-nebula">
+    <div class="project-wrap page-content">
+      <div class="project-top">
+        <div class="project-top-left">
+          <p class="project-tag">Travail de fin d&#39;&#233;tude</p>
+          <h2 class="project-title">Nebula FC</h2>
+          <p class="project-subtitle">Identit&#233; visuelle d&#39;un club fictif</p>
+        </div>
+        <div class="project-top-right">
+          <p class="project-desc">Cr&#233;ation compl&#232;te de l&#39;identit&#233; visuelle d&#39;un club de football fictif &#8212; logo, supports print, packaging, r&#233;seaux sociaux et site web.</p>
+          <div class="project-meta">
+            <div class="project-meta-item">
+              <span class="project-meta-label">Ann&#233;e</span>
+              <span class="project-meta-value">2025</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Cat&#233;gorie</span>
+              <span class="project-meta-value">Branding &amp; Print &amp; Motion</span>
+            </div>
+            <div class="project-meta-item">
+              <span class="project-meta-label">Outils</span>
+              <span class="project-meta-value">Illustrator &#183; InDesign &#183; After Effects</span>
+            </div>
+          </div>
+          <div class="project-nav">
+            <span class="project-back" onclick="goTo(5)">&#8592; Retour travail de fin d&#39;&#233;tude</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-body" style="gap:32px;">
+
+        <!-- Histoire -->
+        <div>
+          <h3 class="nebula-section-title">L&#39;histoire du club</h3>
+          <div class="nebula-story-grid" style="margin-top:20px;">
+            <div class="nebula-story-text">
+              <p>Le Nebula FC est n&#233; en 1988, au c&#339;ur de la Cit&#233; Galerne, un quartier populaire marqu&#233; par son pass&#233; ouvrier et son lien fort avec l&#39;industrie spatiale.</p>
+              <p>&#192; l&#39;&#233;poque, la ville vivait au rythme des usines et des ateliers qui fabriquaient des pi&#232;ces pour satellites, fus&#233;es et &#233;quipements a&#233;ronautiques. La Cit&#233; Galerne &#233;tait connue pour ses familles d&#39;ouvriers, sa solidarit&#233;, son regard tourn&#233; vers le ciel&#8230; et ses Trois Tours, ces immeubles imposants devenus au fil des ann&#233;es le symbole du quartier. Elles surplombent la ville comme des sentinelles silencieuses.</p>
+              <p>Dans ces rues, le football a vite pris une place essentielle. Il repr&#233;sentait un &#233;chappatoire, un moyen de se rassembler, de d&#233;fendre les couleurs du quartier, et de r&#234;ver plus grand. Rapidement, Nebula FC est devenu le symbole de cette fiert&#233; locale, port&#233;e par des g&#233;n&#233;rations de joueurs et de supporters passionn&#233;s.</p>
+              <p>Le club a connu des belles ann&#233;es, avec des mont&#233;es, des derbys intenses, et une r&#233;putation qui d&#233;passait les fronti&#232;res du quartier. Mais comme beaucoup de clubs issus de milieux populaires, Nebula FC a aussi travers&#233; des temp&#234;tes&#160;: la d&#233;sindustrialisation, la crise &#233;conomique, et les cons&#233;quences de la pand&#233;mie.</p>
+              <p>Aujourd&#39;hui, le Nebula FC rena&#238;t de ses cendres. Plus qu&#39;un simple projet sportif, c&#39;est un nouveau d&#233;part pour tout un quartier. Sous le regard des Trois Tours, le Nebula FC est pr&#234;t &#224; &#233;crire un nouveau chapitre de son histoire.</p>
+            </div>
+            <div class="project-cell contain" style="background:#0a0a0a;min-height:300px;">
+              <img src="https://artbydrez.com/wp-content/uploads/2025/08/Logo_800X800.png" alt="Nebula FC Logo" loading="lazy">
+            </div>
+          </div>
+        </div>
+
+        <!-- Logo -->
+        <div>
+          <h3 class="nebula-section-title">Le logo du club et sa cr&#233;ation.</h3>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px;">
+            <div>
+              <div class="project-cell contain" style="height:220px;background:#0a0a0a;">
+                <img src="https://artbydrez.com/wp-content/uploads/2025/10/Avion-1024x1024.jpg" alt="L&#39;avion" loading="lazy">
+              </div>
+              <div class="nebula-symbol-text">
+                <p class="nebula-symbol-name">L&#39;avion</p>
+                <p class="nebula-symbol-desc">Cette partie est un avion vu du haut pour repr&#233;senter le pass&#233; dans l&#39;a&#233;ronautique de la ville.</p>
+              </div>
+            </div>
+            <div>
+              <div class="project-cell contain" style="height:220px;background:#0a0a0a;">
+                <img src="https://artbydrez.com/wp-content/uploads/2025/10/Tour-1024x1024.jpg" alt="Les trois tours" loading="lazy">
+              </div>
+              <div class="nebula-symbol-text">
+                <p class="nebula-symbol-name">Les trois tours</p>
+                <p class="nebula-symbol-desc">Cette partie signifie les tours, le b&#226;timent historique de la ville.</p>
+              </div>
+            </div>
+            <div>
+              <div class="project-cell contain" style="height:220px;background:#0a0a0a;">
+                <img src="https://artbydrez.com/wp-content/uploads/2025/10/1988-1024x1024.jpg" alt="1988" loading="lazy">
+              </div>
+              <div class="nebula-symbol-text">
+                <p class="nebula-symbol-name">Ann&#233;e de cr&#233;ation</p>
+                <p class="nebula-symbol-desc">N&#233; en 1988, je trouvais cela n&#233;cessaire de mettre en &#233;vidence cette date dans le logo du club.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supports visuels -->
+        <div>
+          <h3 class="nebula-section-title">Les supports visuels</h3>
+          <p class="nebula-section-desc" style="margin-top:12px;">Cr&#233;ation de supports de communication vari&#233;s incluant un d&#233;pliant pour la journ&#233;e de d&#233;tection, une carte d&#39;abonnement, des flyers promotionnels, des tickets d&#39;entr&#233;e pour les matchs, une &#233;tiquette avec les instructions de lavage, ainsi que des visuels adapt&#233;s aux r&#233;seaux sociaux. Ce travail s&#39;&#233;tend &#233;galement &#224; la conception du packaging destin&#233; &#224; la bo&#238;te du maillot du club.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Flyers_Stage-1024x712.jpg" alt="Flyer d&#233;tection" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Abonnement_mockup-1024x768.jpg" alt="Carte abonnement" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Ticket_Match-scaled.jpg" alt="Ticket match" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/boite_plat_exterieur-1024x506.jpg" alt="Bo&#238;te maillot ext&#233;rieur" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/boite_plat_interieur.jpg" alt="Bo&#238;te maillot int&#233;rieur" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Visuel_Insta-1024x712.jpg" alt="Visuel Instagram" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Nouveau-logo_Insta-1024x1024.jpg" alt="Nouveau logo Instagram" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Composition-scaled-e1760961746600-1024x1024.jpg" alt="Composition" loading="lazy"></div>
+            <div class="project-cell" style="height:220px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Visuel-entraineur-1024x1024.jpg" alt="Visuel entra&#238;neur" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Maillots -->
+        <div>
+          <h3 class="nebula-section-title">Publicit&#233; d&#39;annonce pour le maillot.</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+            <div>
+              <p class="nebula-jersey-label">Maillot domicile</p>
+              <div class="project-cell" style="height:300px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Flyers-maillot_2-1024x683.jpg" alt="Maillot domicile" loading="lazy"></div>
+            </div>
+            <div>
+              <p class="nebula-jersey-label">Maillot ext&#233;rieur</p>
+              <div class="project-cell" style="height:300px;"><img src="https://artbydrez.com/wp-content/uploads/2025/10/Flyers_EXT-1024x768.jpg" alt="Maillot ext&#233;rieur" loading="lazy"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Animation -->
+        <div>
+          <h3 class="nebula-section-title">L&#39;animation du logo</h3>
+          <div class="project-cell" style="height:360px;margin-top:16px;">
+            <video autoplay loop muted playsinline><source src="https://artbydrez.com/wp-content/uploads/2025/10/Fichier-anim-logo_1.mp4" type="video/mp4"></video>
+          </div>
+        </div>
+
+        <!-- Site du club -->
+        <div style="padding-bottom:20px;">
+          <h3 class="nebula-section-title">Le site du club</h3>
+          <p class="nebula-section-desc" style="margin-top:12px;">J&#39;ai opt&#233; pour WordPress et Elementor afin de concevoir un site web professionnel, moderne et facile &#224; mettre &#224; jour.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+<script>
+(function() {
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light');
+  }
+})();
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+let current = 0;
+const total = 12;
+const portfolioPages = [1, 2, 3, 4, 5, 8, 9, 10];
+function goTo(index) {
+  if (index === current) return;
+  current = index;
+  location.hash = index;
+  document.getElementById('slider').className = 'slider slide-' + index;
+  document.querySelectorAll('.nav-link').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.page) === index);
+  });
+  const dropBtn = document.querySelector('.nav-dropdown-btn');
+  dropBtn.classList.toggle('active', portfolioPages.includes(index));
+  document.querySelectorAll('.pi-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+  const pi = document.getElementById('pageIndicator');
+  if (pi) pi.classList.toggle('hidden', index >= 8);
+  setTimeout(() => {
+    document.querySelectorAll('.page-content').forEach(el => el.classList.remove('visible'));
+    const activeContent = document.querySelectorAll('.page')[index].querySelector('.page-content');
+    if (activeContent) activeContent.classList.add('visible');
+  }, 200);
+}
+(function restoreFromHash() {
+  const h = parseInt(location.hash.replace('#', ''));
+  if (!isNaN(h) && h >= 0) goTo(h);
+})();
+function toggleDropdown() {
+  const wrap = document.getElementById('portfolioDropdown');
+  wrap.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('portfolioDropdown');
+  if (!wrap.contains(e.target)) wrap.classList.remove('open');
+});
+const projectPages = [8, 9, 10, 11];
+document.addEventListener('keydown', e => {
+  if (projectPages.includes(current)) {
+    if (e.key === 'Escape' || e.key === 'ArrowLeft') { if (current === 11) goTo(5); else goTo(2); }
+    return;
+  }
+  if (e.key === 'ArrowRight' && current < 7) goTo(current + 1);
+  if (e.key === 'ArrowLeft' && current > 0) goTo(current - 1);
+  if (e.key === 'Escape') document.getElementById('portfolioDropdown').classList.remove('open');
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (projectPages.includes(current)) { if (dx > 0) { if (current === 11) goTo(5); else goTo(2); } return; }
+    if (dx < 0 && current < 7) goTo(current + 1);
+    if (dx > 0 && current > 0) goTo(current - 1);
+  }
+}, { passive: true });
+function handleForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('.form-submit');
+  const name = form.querySelector('input[type="text"]').value.trim();
+  const email = form.querySelector('input[type="email"]').value.trim();
+  const message = form.querySelector('textarea').value.trim();
+
+  // Validation visuelle
+  let valid = true;
+  [form.querySelector('input[type="text"]'), form.querySelector('input[type="email"]')].forEach(input => {
+    if (!input.value.trim()) {
+      input.style.borderColor = '#ff4d4d';
+      input.style.animation = 'shake 0.35s ease';
+      setTimeout(() => { input.style.animation = ''; }, 400);
+      valid = false;
+    } else {
+      input.style.borderColor = '';
+    }
+  });
+  if (!valid) return;
+
+  // Ouvrir mailto avec les donn\u00e9es du formulaire
+  const subject = encodeURIComponent('Prise de contact \u2014 ' + name);
+  const body = encodeURIComponent('Nom : ' + name + '\nEmail : ' + email + '\n\n' + (message || '(aucun message)'));
+  window.location.href = 'mailto:info@artbydrez.com?subject=' + subject + '&body=' + body;
+
+  // Feedback visuel succ\u00e8s
+  btn.textContent = 'Message pr\u00e9par\u00e9 \u2713';
+  btn.style.background = '#0c0c0c';
+  btn.style.color = '#22c55e';
+  btn.style.border = '0.5px solid #22c55e';
+  setTimeout(() => { btn.textContent = 'Envoyer le message \u2192'; btn.style = ''; form.reset(); }, 4000);
+}
+
+// ── Lightbox ──
+function openLightbox(src, type) {
+  const lb = document.getElementById('lightbox');
+  const wrap = document.getElementById('lightbox-media');
+  wrap.innerHTML = type === 'video'
+    ? `<video src="${src}" autoplay loop muted playsinline controls style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;"></video>`
+    : `<img src="${src}" style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;">`;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  setTimeout(() => { document.getElementById('lightbox-media').innerHTML = ''; }, 300);
+  document.body.style.overflow = '';
+}
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('open')) {
+    closeLightbox(); e.stopPropagation();
+  }
+});
+
+// Bind lightbox sur toutes les portfolio-cards (images + vidéos)
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.portfolio-card').forEach(card => {
+    // Ignorer les cartes qui naviguent vers une page projet
+    if (card.getAttribute('onclick') && card.getAttribute('onclick').includes('goTo')) return;
+    card.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const video = card.querySelector('video source, video');
+      const img = card.querySelector('img');
+      if (video) {
+        const src = video.tagName === 'SOURCE' ? video.src : video.src;
+        openLightbox(src, 'video');
+      } else if (img) {
+        openLightbox(img.src, 'image');
+      }
+    });
+  });
+});
+
+// ── Custom cursor ──
+(function() {
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  let rafId;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function tick() {
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    rx = lerp(rx, mx, 0.12); ry = lerp(ry, my, 0.12);
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    rafId = requestAnimationFrame(tick);
+  }
+  tick();
+
+  const hoverSel = 'a, button, [onclick], .portfolio-card, .carousel-slide, .po-panel, .disc-item, .contact-link-row, .project-back, .portfolio-back, .nav-logo, .pi-dot, .carousel-dot, label';
+  const textSel = 'input, textarea';
+
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(textSel)) { document.body.classList.add('cursor-text'); document.body.classList.remove('cursor-hover'); }
+    else if (e.target.closest(hoverSel)) { document.body.classList.add('cursor-hover'); document.body.classList.remove('cursor-text'); }
+  });
+  document.addEventListener('mouseout', e => {
+    if (!e.relatedTarget || (!e.relatedTarget.closest(hoverSel) && !e.relatedTarget.closest(textSel))) {
+      document.body.classList.remove('cursor-hover', 'cursor-text');
+    }
+  });
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup', () => document.body.classList.remove('cursor-click'));
+  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+})();
+
+// ── Carousel accueil ──
+let carouselIdx = 0;
+const carouselTotal = 4;
+let carouselTimer = null;
+let carouselProgress = 0;
+const CAROUSEL_DURATION = 5000;
+
+function carouselGo(idx) {
+  carouselIdx = ((idx % carouselTotal) + carouselTotal) % carouselTotal;
+  document.getElementById('carouselTrack').style.transform = 'translateX(-' + (carouselIdx * 100) + '%)';
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIdx));
+  carouselProgress = 0;
+  document.getElementById('carouselBar').style.transition = 'none';
+  document.getElementById('carouselBar').style.width = '0%';
+  setTimeout(() => {
+    document.getElementById('carouselBar').style.transition = 'width ' + CAROUSEL_DURATION + 'ms linear';
+    document.getElementById('carouselBar').style.width = '100%';
+  }, 20);
+}
+
+function carouselStart() {
+  clearInterval(carouselTimer);
+  carouselTimer = setInterval(() => { carouselGo(carouselIdx + 1); }, CAROUSEL_DURATION);
+  carouselGo(0);
+}
+
+// Démarrer le carousel quand on est sur la page d'accueil
+document.addEventListener('DOMContentLoaded', carouselStart);
+
+// Blur morph — eyebrow word rotation
+(function() {
+  const words = ['Infographiste', 'Motion designer', 'Graphiste'];
+  let idx = 0;
+  const el = document.querySelector('.eyebrow-word');
+  if (!el) return;
+
+  function cycle() {
+    el.style.filter = 'blur(12px)';
+    el.style.opacity = '0';
+    setTimeout(() => {
+      idx = (idx + 1) % words.length;
+      el.textContent = words[idx];
+      el.setAttribute('data-text', words[idx]);
+      el.offsetHeight;
+      el.style.filter = 'blur(0px)';
+      el.style.opacity = '1';
+      setTimeout(cycle, 3200);
+    }, 500);
+  }
+
+  el.style.filter = 'blur(12px)';
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.style.filter = 'blur(0px)';
+    el.style.opacity = '1';
+    setTimeout(cycle, 3200);
+  }, 300);
+})();
+
+// Swipe sur le carousel
+const carouselEl = document.getElementById('homeCarousel');
+if (carouselEl) {
+  let cTouchX = 0;
+  carouselEl.addEventListener('touchstart', e => { cTouchX = e.touches[0].clientX; }, { passive: true });
+  carouselEl.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - cTouchX;
+    if (Math.abs(dx) > 40) carouselGo(carouselIdx + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+}
+
+</script>
+</body>
+</html>
