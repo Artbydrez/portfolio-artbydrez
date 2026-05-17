@@ -1794,10 +1794,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (card.getAttribute('onclick') && card.getAttribute('onclick').includes('goTo')) return;
     card.addEventListener('click', function(e) {
       e.stopPropagation();
-      const video = card.querySelector('video source, video');
+      const video = card.querySelector('video');
       const img = card.querySelector('img');
       if (video) {
-        const src = video.tagName === 'SOURCE' ? video.src : video.src;
+        const source = video.querySelector('source');
+        const src = source ? source.src : video.src;
         openLightbox(src, 'video');
       } else if (img) {
         openLightbox(img.src, 'image');
