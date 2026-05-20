@@ -809,6 +809,10 @@ html.light .tl-dot { background: var(--accent); }
   .home-right { height: 260px; }
   .disc-strip { grid-template-columns: repeat(3,1fr); }
   .about-wrap, .contact-wrap { grid-template-columns: 1fr; overflow-y: auto; }
+  .about-wrap { margin-top: 76px; display: block; height: calc(100vh - 76px); touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .about-left { position: sticky; top: 0; height: calc(100vh - 76px); border-right: none; z-index: 0; }
+  .about-right { position: relative; z-index: 1; background: var(--bg); margin-top: -25vh; padding: 32px 36px 60px; justify-content: flex-start; gap: 28px; }
+  .about-right::before { content: ''; position: absolute; top: -80px; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; }
   .dropdown-menu { left: 0; transform: translateX(0); }
   .nav-dropdown-wrap:hover .dropdown-menu, .nav-dropdown-wrap.open .dropdown-menu { transform: translateX(0) translateY(0); }
 }
@@ -976,7 +980,10 @@ html.light .tl-dot { background: var(--accent); }
   .po-panel-num { font-size: 8px; }
 
   /* About */
-  .about-right { padding: 24px 20px; }
+  .about-wrap { margin-top: 62px; height: calc(100vh - 62px); touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .about-left { height: calc(100vh - 62px); }
+  .about-right { padding: 28px 20px 60px; gap: 20px; }
+  .about-right::before { height: 60px; top: -60px; }
   .about-label { font-size: 9px; margin-bottom: 18px; }
   .about-title { font-size: clamp(28px, 8vw, 42px); letter-spacing: -0.03em; }
   .about-body { font-size: 13px; line-height: 1.7; margin-top: 16px; }
@@ -985,7 +992,7 @@ html.light .tl-dot { background: var(--accent); }
   .tl-place { font-size: 12px; }
   .tl-desc { font-size: 11px; line-height: 1.55; }
   .tl-year { font-size: 10px; }
-  .about-cta { margin-top: 24px; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .about-cta { margin-top: 0; flex-direction: column; align-items: flex-start; gap: 10px; }
   .btn-outline { font-size: 10px; padding: 10px 20px; }
 
   /* Contact */
@@ -1040,7 +1047,7 @@ html.light .tl-dot { background: var(--accent); }
   .eyebrow-word { font-size: 14px; }
   .home-desc { font-size: 12px; }
   .portfolio-grid { gap: 8px; padding: 10px 12px 20px; }
-  .about-right { padding: 20px 16px; }
+  .about-right { padding: 24px 16px 60px; gap: 16px; }
   .about-title { font-size: 26px; }
   .contact-left, .contact-right { padding: 20px 16px; }
   .contact-title { font-size: 26px; }
@@ -1980,11 +1987,12 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' && current > 0) goTo(current - 1);
   if (e.key === 'Escape') document.getElementById('portfolioDropdown').classList.remove('open');
 });
-let touchStartX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
 document.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(dx) > 60) {
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
     if (projectPages.includes(current)) { if (dx > 0) { if (current === 11) goTo(5); else goTo(2); } return; }
     if (dx < 0 && current < 7) goTo(current + 1);
     if (dx > 0 && current > 0) goTo(current - 1);
