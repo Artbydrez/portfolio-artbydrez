@@ -814,7 +814,7 @@ html.light .tl-dot { background: var(--accent); }
   .about-wrap, .contact-wrap { grid-template-columns: 1fr; overflow-y: auto; }
   .about-wrap { margin-top: 0; display: block; height: 100vh; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
   .about-left { position: sticky; top: 0; height: 65vh; border-right: none; z-index: 0; }
-  .about-right { position: relative; z-index: 1; background: var(--bg); margin-top: -25vh; padding: 32px 36px 220px; justify-content: flex-start; gap: 28px; overflow-y: visible; }
+  .about-right { position: relative; z-index: 1; background: var(--bg); margin-top: -25vh; padding: 32px 36px 220px; justify-content: flex-start; gap: 28px; overflow-y: visible; min-height: 100vh; }
   .about-right::before { content: ''; position: absolute; top: -80px; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; }
   .dropdown-menu { left: 0; transform: translateX(0); }
   .nav-dropdown-wrap:hover .dropdown-menu, .nav-dropdown-wrap.open .dropdown-menu { transform: translateX(0) translateY(0); }
