@@ -427,6 +427,11 @@ html.light {
 .pg-sport    { grid-template-columns: repeat(4, 1fr); }
 .pg-motion   { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); overflow: hidden; align-items: stretch; }
 .pg-motion .card-video { aspect-ratio: unset; }
+/* Mobile : pg-motion scrollable */
+@media (max-width: 768px) {
+  .pg-motion { grid-template-rows: unset; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .pg-motion .card-video { aspect-ratio: 9/16; }
+}
 .pg-identite { grid-template-columns: repeat(3, 1fr); }
 /* Cellule texte — style magazine dans les pages projet */
 .project-cell.text-cell { padding: 32px 36px; display: flex; flex-direction: column; justify-content: center; gap: 12px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; }
