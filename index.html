@@ -947,8 +947,14 @@ html.light .tl-dot { background: var(--accent); }
   .nebula-story-grid { grid-template-columns: 1fr; gap: 20px; }
 
   /* Portfolio */
-  .portfolio-header { padding: 28px 28px 20px; }
+  .portfolio-header { padding: 28px 28px 20px; flex-wrap: wrap; gap: 10px 0; }
   .portfolio-subtitle { max-width: 100%; }
+  .portfolio-wrap { margin-top: 76px; }
+
+  /* Identité visuelle — 1 colonne pleine largeur */
+  .pg-identite { grid-template-columns: 1fr !important; }
+  /* Overlay toujours visible sur touch (pas de hover) */
+  .pg-identite .portfolio-card-inner { opacity: 1; }
 }
 
 /* ═══════════════════════════════════
