@@ -179,6 +179,9 @@ html.light {
   overflow: hidden; position: relative;
   display: flex; flex-direction: column;
 }
+@supports (height: 100dvh) {
+  .page { height: 100dvh; }
+}
 .home-body {
   flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; margin-top: 96px;
 }
