@@ -286,21 +286,26 @@ html.light {
 .d-num { font-size: 15px; font-weight: 300; color: var(--text-muted); position: relative; z-index: 1; transition: color 0.3s; }
 .ticker {
   border-top: 0.5px solid var(--border-subtle);
-  overflow: hidden; white-space: nowrap;
-  padding: 11px 0; position: relative;
-  -webkit-mask: radial-gradient(ellipse 62% 400% at 50% 50%, black 20%, transparent 72%);
-  mask: radial-gradient(ellipse 62% 400% at 50% 50%, black 20%, transparent 72%);
+  overflow: hidden;
+  padding: 14px 0; position: relative;
+  -webkit-mask: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 .ticker-inner {
-  display: inline-block;
-  animation: tickerAnim 32s linear infinite;
-  font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase;
-  color: var(--text-secondary);
+  display: flex; align-items: center; gap: 14px;
+  animation: tickerAnim 38s linear infinite;
   will-change: transform;
 }
 .ticker:hover .ticker-inner { animation-play-state: paused; }
-.t-word { color: var(--text-primary); font-weight: 500; }
-.t-sep  { color: var(--accent); margin: 0 22px; opacity: 0.9; }
+.ticker-item {
+  flex-shrink: 0; width: 130px; height: 76px;
+  border-radius: 8px; overflow: hidden; cursor: pointer;
+  filter: grayscale(1); opacity: 0.7;
+  transition: filter 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+}
+.ticker-item:hover { filter: grayscale(0); opacity: 1; transform: scale(1.05); }
+.ticker-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+html.light .ticker-item { opacity: 0.8; }
 .about-wrap {
   flex: 1; display: grid; grid-template-columns: 42% 58%; grid-template-rows: 1fr; margin-top: 96px;
 }
@@ -1220,7 +1225,7 @@ html.light .tl-dot { background: var(--accent); }
             </div>
           </div>
           <div class="carousel-slide" onclick="goTo(3)">
-            <div class="carousel-slide-bg" style="background-image:url('Sport/Dembele.png');background-size:cover;background-position:center top;"></div>
+            <div class="carousel-slide-bg" style="background-image:url('Sport/Dembele.jpg');background-size:cover;background-position:center top;"></div>
             <div class="carousel-slide-overlay"></div>
             <div class="carousel-slide-content">
               <span class="carousel-slide-cat">02 — Design sportif</span>
@@ -1284,7 +1289,7 @@ html.light .tl-dot { background: var(--accent); }
         <span class="po-panel-arrow">&#8599;</span>
       </div>
       <div class="po-panel" onclick="goTo(3)">
-        <div class="po-panel-bg" style="background-image:url('Sport/Dembele.png');background-position:center top;"></div>
+        <div class="po-panel-bg" style="background-image:url('Sport/Dembele.jpg');background-position:center top;"></div>
         <div class="po-panel-overlay"></div>
         <div class="po-panel-top">
           <span class="po-panel-num">02</span>
@@ -1360,16 +1365,16 @@ html.light .tl-dot { background: var(--accent); }
         </div>
       </div>
       <div class="portfolio-grid pg-sport">
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Dembele.png" alt="Dembel&#233; — PSG" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Dembel&#233; — PSG</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Leao.png" alt="Rafael Le&#227;o — Milan AC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Rafael Le&#227;o — Milan AC</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Madueke_Jour.png" alt="Madueke — Chelsea" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Madueke — Chelsea</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Tonali.png" alt="Tonali" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Tonali</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Ronaldinho.png" alt="Ronaldinho" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Ronaldinho</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Maignan.png" alt="Maignan — Milan AC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Maignan — Milan AC</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Kean.png" alt="Kean" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Kean</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Barcola.png" alt="Barcola — PSG" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Barcola — PSG</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Milan_Juve.png" alt="AC Milan vs Juventus" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">AC Milan vs Juventus</p></div></div>
-        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Gyokeres.png" alt="Gy&#246;keres" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Gy&#246;keres</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Dembele.jpg" alt="Dembel&#233; — PSG" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Dembel&#233; — PSG</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Leao.jpg" alt="Rafael Le&#227;o — Milan AC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Rafael Le&#227;o — Milan AC</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Madueke_Jour.jpg" alt="Madueke — Chelsea" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Madueke — Chelsea</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Tonali.jpg" alt="Tonali" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Tonali</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Ronaldinho.jpg" alt="Ronaldinho" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Ronaldinho</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Maignan.jpg" alt="Maignan — Milan AC" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Maignan — Milan AC</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Kean.jpg" alt="Kean" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Kean</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Barcola.jpg" alt="Barcola — PSG" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Barcola — PSG</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Milan_Juve.jpg" alt="AC Milan vs Juventus" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">AC Milan vs Juventus</p></div></div>
+        <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/Gyokeres.jpg" alt="Gy&#246;keres" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Gy&#246;keres</p></div></div>
         <div class="portfolio-card"><div class="portfolio-card-bg"><img src="Sport/saelemaekers.jpeg" alt="Saelemaekers" loading="lazy"></div><div class="portfolio-card-inner"><p class="portfolio-card-tag">Football</p><p class="portfolio-card-name">Saelemaekers</p></div></div>
       </div>
     </div>
