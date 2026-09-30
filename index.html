@@ -2072,6 +2072,20 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// Accessibilité clavier : cartes, slides et panneaux cliquables via onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.portfolio-card, .carousel-slide, .po-panel').forEach(el => {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        el.click();
+      }
+    });
+  });
+});
+
 // Bind lightbox sur toutes les portfolio-cards (images + vidéos)
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.portfolio-card').forEach(card => {
