@@ -1979,6 +1979,10 @@ function goTo(index) {
   const h = parseInt(location.hash.replace('#', ''));
   if (!isNaN(h) && h >= 0) goTo(h);
 })();
+window.addEventListener('hashchange', () => {
+  const h = parseInt(location.hash.replace('#', ''));
+  if (!isNaN(h) && h >= 0 && h !== current) goTo(h);
+});
 function toggleDropdown() {
   const wrap = document.getElementById('portfolioDropdown');
   wrap.classList.toggle('open');
