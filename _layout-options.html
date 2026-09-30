@@ -2,16 +2,16 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
-<title>5 mises en page — colonne gauche</title>
+<title>5 mises en page — pleine hauteur</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:#0c0c0c;color:#f0f0f0;font-family:'Helvetica Neue',Arial,sans-serif;}
-  :root{--mint:#C7FFED;--text-dim:#666;--text-secondary:#999;}
+  :root{--mint:#C7FFED;--text-dim:#666;--text-secondary:#999;--border:#2a2a2a;}
   .option{height:100vh;display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid var(--mint);position:relative;}
   .option-tag{position:absolute;top:20px;left:20px;z-index:50;background:var(--mint);color:#111;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;}
   .option-name{position:absolute;top:20px;right:20px;z-index:50;font-size:11px;color:#666;letter-spacing:.1em;text-transform:uppercase;text-align:right;}
-  .left{padding:44px 52px;display:flex;flex-direction:column;position:relative;}
-  .right{background:#111;border-left:0.5px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#444;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background-image:url('dwello/Dwello_couverture_ANIM.jpg');background-size:cover;background-position:center;position:relative;}
+  .left{padding:44px 52px;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
+  .right{background:#111;border-left:0.5px solid var(--border);background-image:url('dwello/Dwello_couverture_ANIM.jpg');background-size:cover;background-position:center;position:relative;}
   .right::after{content:'Carousel actuel — inchangé';position:absolute;bottom:20px;left:20px;background:rgba(0,0,0,.6);padding:6px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#ccc;}
   .eyebrow{color:var(--mint);font-size:15px;font-weight:300;letter-spacing:.12em;text-transform:uppercase;}
   .name{font-size:clamp(50px,6vw,80px);font-weight:700;line-height:.9;letter-spacing:-0.04em;}
@@ -19,109 +19,126 @@
   .desc{font-size:13px;line-height:1.85;color:var(--text-secondary);max-width:260px;}
   .btn{display:inline-block;background:var(--mint);color:#111;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 28px;cursor:pointer;}
   .link{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);}
+  .bottom-group{display:flex;flex-direction:column;gap:16px;align-items:flex-start;}
 
-  /* 1. Compact centré */
-  .o1 .left{justify-content:center;gap:28px;}
+  /* 2. 3 blocs égaux */
+  .o2-mid{font-size:20px;font-weight:700;line-height:1.3;max-width:320px;color:#eee;}
+  .o2-mid span{color:var(--mint);}
 
-  /* 2. Chiffres clés */
-  .o2 .left{justify-content:flex-start;gap:24px;}
-  .o2-stats{display:flex;gap:28px;margin:8px 0 4px;}
-  .o2-stats div b{display:block;font-size:22px;font-weight:700;color:var(--mint);}
-  .o2-stats div span{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);}
+  /* 3. 4 disciplines réparties */
+  .o3 .left{justify-content:space-between;}
+  .o3-tags{display:flex;flex-direction:column;gap:14px;}
+  .o3-tags div{display:flex;align-items:baseline;gap:12px;}
+  .o3-tags i{font-style:normal;font-size:11px;color:var(--mint);}
+  .o3-tags span{font-size:16px;font-weight:500;color:#ddd;}
 
-  /* 3. Pitch en avant */
-  .o3 .left{justify-content:flex-start;gap:20px;}
-  .o3 .eyebrow-name{font-size:13px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;}
-  .o3 .big-pitch{font-size:28px;font-weight:700;line-height:1.15;max-width:420px;}
-  .o3 .big-pitch em{color:var(--mint);font-style:normal;}
+  /* 4. ligne verticale décorative */
+  .o4 .left::before{content:'';position:absolute;left:52px;top:190px;bottom:190px;width:1px;background:linear-gradient(to bottom, var(--mint), rgba(199,255,237,0.05));}
+  .o4 .top-block{padding-left:22px;}
+  .o4 .bottom-group{padding-left:22px;}
 
-  /* 4. Disciplines en tags */
-  .o4 .left{justify-content:flex-start;gap:22px;}
-  .o4-tags{display:flex;flex-direction:column;gap:8px;}
-  .o4-tags span{font-size:12px;color:#ccc;padding:8px 0;border-bottom:0.5px solid #2a2a2a;display:flex;justify-content:space-between;max-width:260px;}
-  .o4-tags span i{color:var(--mint);font-style:normal;font-size:10px;}
-
-  /* 5. Ligne de connexion */
-  .o5 .left{justify-content:space-between;position:relative;}
-  .o5 .left::before{content:'';position:absolute;left:52px;top:170px;bottom:150px;width:1px;background:linear-gradient(to bottom, var(--mint), transparent);}
-  .o5 .bottom-block{padding-left:22px;}
+  /* 5. timeline carrés (style CV) */
+  .o5-timeline{position:relative;padding-left:20px;}
+  .o5-timeline::before{content:'';position:absolute;left:2px;top:4px;bottom:4px;width:1px;background:var(--border);}
+  .o5-timeline div{position:relative;padding-bottom:14px;font-size:12px;color:#aaa;}
+  .o5-timeline div::before{content:'';position:absolute;left:-20px;top:3px;width:5px;height:5px;background:var(--mint);}
+  .o5-timeline div b{color:#fff;font-weight:500;}
 </style>
 </head>
 <body>
 
-<!-- OPTION 1 -->
-<div class="option o1">
+<!-- OPTION 1 : référence actuelle -->
+<div class="option">
   <span class="option-tag">Option 1</span>
-  <span class="option-name">Compact centré</span>
+  <span class="option-name">Actuel (référence)</span>
   <div class="left">
-    <p class="eyebrow">Infographiste</p>
-    <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
-    <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants, toujours avec le souci du détail.</p>
-    <div><span class="btn">Me contacter →</span></div>
-    <span class="link">À propos ↗</span>
-  </div>
-  <div class="right"></div>
-</div>
-
-<!-- OPTION 2 -->
-<div class="option o2">
-  <span class="option-tag">Option 2</span>
-  <span class="option-name">Chiffres clés</span>
-  <div class="left">
-    <p class="eyebrow">Infographiste</p>
-    <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
-    <div class="o2-stats">
-      <div><b>4</b><span>Disciplines</span></div>
-      <div><b>2025</b><span>Diplômé</span></div>
-      <div><b>BE</b><span>Charleroi</span></div>
+    <div>
+      <p class="eyebrow">Infographiste</p>
+      <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
     </div>
-    <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants.</p>
-    <div><span class="btn">Me contacter →</span></div>
+    <div class="bottom-group">
+      <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants, toujours avec le souci du détail.</p>
+      <span class="btn">Me contacter →</span>
+      <span class="link">À propos ↗</span>
+    </div>
   </div>
   <div class="right"></div>
 </div>
 
-<!-- OPTION 3 -->
+<!-- OPTION 2 : 3 blocs égaux, punchline au milieu -->
+<div class="option">
+  <span class="option-tag">Option 2</span>
+  <span class="option-name">Punchline au milieu</span>
+  <div class="left">
+    <div>
+      <p class="eyebrow">Infographiste</p>
+      <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
+    </div>
+    <p class="o2-mid">Chaque projet mérite <span>une touche finale.</span></p>
+    <div class="bottom-group">
+      <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants.</p>
+      <span class="btn">Me contacter →</span>
+    </div>
+  </div>
+  <div class="right"></div>
+</div>
+
+<!-- OPTION 3 : 4 disciplines réparties -->
 <div class="option o3">
   <span class="option-tag">Option 3</span>
-  <span class="option-name">Le pitch en avant</span>
+  <span class="option-name">Disciplines réparties</span>
   <div class="left">
-    <p class="eyebrow-name">Loris Fauville — Infographiste</p>
-    <p class="big-pitch">Je crée des visuels <em>clairs et percutants</em>, toujours avec le souci du détail.</p>
-    <div><span class="btn">Me contacter →</span></div>
-    <span class="link">À propos ↗</span>
+    <div>
+      <p class="eyebrow">Infographiste</p>
+      <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
+    </div>
+    <div class="o3-tags">
+      <div><i>01</i><span>Identité visuelle</span></div>
+      <div><i>02</i><span>Design sportif</span></div>
+      <div><i>03</i><span>Motion design</span></div>
+      <div><i>04</i><span>UI / UX</span></div>
+    </div>
+    <div class="bottom-group">
+      <span class="btn">Me contacter →</span>
+    </div>
   </div>
   <div class="right"></div>
 </div>
 
-<!-- OPTION 4 -->
+<!-- OPTION 4 : ligne verticale décorative -->
 <div class="option o4">
   <span class="option-tag">Option 4</span>
-  <span class="option-name">Disciplines en liste</span>
+  <span class="option-name">Ligne de connexion</span>
   <div class="left">
-    <p class="eyebrow">Infographiste</p>
-    <h1 class="name" style="font-size:56px;">Loris<br><span class="last">Fauville</span></h1>
-    <div class="o4-tags">
-      <span>Identité visuelle <i>01</i></span>
-      <span>Design sportif <i>02</i></span>
-      <span>Motion design <i>03</i></span>
-      <span>UI / UX <i>04</i></span>
+    <div class="top-block">
+      <p class="eyebrow">Infographiste</p>
+      <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
     </div>
-    <div><span class="btn">Me contacter →</span></div>
+    <div class="bottom-group">
+      <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants, toujours avec le souci du détail.</p>
+      <span class="btn">Me contacter →</span>
+    </div>
   </div>
   <div class="right"></div>
 </div>
 
-<!-- OPTION 5 -->
-<div class="option o5">
+<!-- OPTION 5 : timeline carrés façon CV -->
+<div class="option">
   <span class="option-tag">Option 5</span>
-  <span class="option-name">Ligne de connexion</span>
+  <span class="option-name">Timeline façon CV</span>
   <div class="left">
-    <p class="eyebrow">Infographiste</p>
-    <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
-    <div class="bottom-block">
-      <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants, toujours avec le souci du détail.</p>
-      <div style="margin-top:16px;"><span class="btn">Me contacter →</span></div>
+    <div>
+      <p class="eyebrow">Infographiste</p>
+      <h1 class="name">Loris<br><span class="last">Fauville</span></h1>
+    </div>
+    <div class="o5-timeline">
+      <div><b>2025</b> — Diplômé infographiste</div>
+      <div><b>2025</b> — Stage OVATION Studio</div>
+      <div><b>2019</b> — CESS artistique</div>
+    </div>
+    <div class="bottom-group">
+      <p class="desc">Graphiste passionné, je crée des visuels clairs et percutants.</p>
+      <span class="btn">Me contacter →</span>
     </div>
   </div>
   <div class="right"></div>
