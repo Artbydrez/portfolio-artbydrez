@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<title>5 mises en page — accueil</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0c0c0c;color:#f0f0f0;font-family:'Helvetica Neue',Arial,sans-serif;}
+  :root{--mint:#C7FFED;--bg:#0c0c0c;--surface:#111;--border:#2a2a2a;--text-label:#888;--text-secondary:#999;}
+  .option{height:100vh;position:relative;border-bottom:2px solid var(--mint);overflow:hidden;}
+  .option-tag{position:absolute;top:20px;left:20px;z-index:50;background:var(--mint);color:#111;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;}
+  .option-name{position:absolute;top:20px;right:20px;z-index:50;font-size:11px;color:#666;letter-spacing:.1em;text-transform:uppercase;}
+
+  /* shared bits */
+  .navpill{position:absolute;top:24px;left:50%;transform:translateX(-50%);background:#161616;border:0.5px solid var(--border);border-radius:100px;padding:8px 20px;font-size:11px;color:var(--text-label);letter-spacing:.05em;z-index:40;}
+  .btn{display:inline-block;background:var(--mint);color:#111;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 28px;border-radius:2px;}
+
+  /* === OPTION 1 : cinématique plein écran === */
+  .o1-bg{position:absolute;inset:0;background:url('Sport/Dembele.jpg') center/cover;filter:grayscale(0.3) brightness(0.5);}
+  .o1-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,12,12,0.2),rgba(12,12,12,0.9) 75%);}
+  .o1-content{position:absolute;bottom:80px;left:60px;z-index:10;max-width:600px;}
+  .o1-content .eyebrow{color:var(--mint);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;}
+  .o1-content h1{font-size:72px;font-weight:700;line-height:0.95;margin-bottom:20px;}
+  .o1-content p{color:#ccc;font-size:14px;line-height:1.7;margin-bottom:28px;max-width:440px;}
+
+  /* === OPTION 2 : portrait humain === */
+  .o2-grid{display:grid;grid-template-columns:1fr 1fr;height:100%;padding-top:90px;}
+  .o2-left{padding:40px 60px;display:flex;flex-direction:column;justify-content:center;gap:24px;}
+  .o2-left .eyebrow{color:var(--mint);font-size:12px;letter-spacing:.2em;text-transform:uppercase;}
+  .o2-left h1{font-size:64px;font-weight:700;line-height:0.95;}
+  .o2-left p{color:#999;font-size:14px;line-height:1.7;max-width:380px;}
+  .o2-right{position:relative;background:#161616;}
+  .o2-right img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);}
+  .o2-strip{position:absolute;bottom:0;left:0;right:0;display:flex;gap:2px;height:70px;}
+  .o2-strip div{flex:1;background-size:cover;background-position:center;filter:grayscale(1);opacity:.85;}
+
+  /* === OPTION 3 : flux vertical magazine === */
+  .o3-wrap{padding-top:110px;height:100%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px;}
+  .o3-wrap .eyebrow{color:var(--mint);font-size:12px;letter-spacing:.25em;text-transform:uppercase;}
+  .o3-wrap h1{font-size:80px;font-weight:700;line-height:0.9;}
+  .o3-image{width:min(720px,70vw);aspect-ratio:16/8;background:url('dwello/Dwello_couverture_ANIM.jpg') center/cover;border-radius:4px;filter:grayscale(0.15);}
+  .o3-wrap p{color:#999;font-size:14px;max-width:460px;line-height:1.7;}
+
+  /* === OPTION 4 : bento éditorial === */
+  .o4-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;height:100%;padding-top:90px;}
+  .o4-cell{position:relative;background:#161616;overflow:hidden;padding:24px;}
+  .o4-cell.text{display:flex;flex-direction:column;justify-content:center;gap:16px;}
+  .o4-cell.text .eyebrow{color:var(--mint);font-size:11px;letter-spacing:.2em;text-transform:uppercase;}
+  .o4-cell.text h1{font-size:44px;font-weight:700;line-height:1;}
+  .o4-cell.text p{color:#999;font-size:13px;line-height:1.6;max-width:320px;}
+  .o4-cell.img{background-size:cover;background-position:center;filter:grayscale(0.5);}
+  .o4-cell.img span{position:absolute;bottom:14px;left:16px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,0.5);padding:4px 8px;}
+  .o4-cell.cta{grid-row:span 1;display:flex;align-items:center;justify-content:center;background:var(--mint);}
+
+  /* === OPTION 5 : minimal typographique === */
+  .o5-wrap{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 60px;}
+  .o5-wrap .eyebrow{color:var(--mint);font-size:13px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:24px;}
+  .o5-wrap h1{font-size:min(14vw,190px);font-weight:700;line-height:0.85;letter-spacing:-0.03em;}
+  .o5-wrap h1 .last{color:transparent;-webkit-text-stroke:1.5px #555;}
+  .o5-bottom{position:absolute;bottom:40px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:flex-end;}
+  .o5-bottom p{color:#999;font-size:13px;max-width:320px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- OPTION 1 -->
+<div class="option">
+  <span class="option-tag">Option 1</span>
+  <span class="option-name">Cinématique plein écran</span>
+  <div class="o1-bg"></div>
+  <div class="o1-overlay"></div>
+  <div class="navpill">Accueil · Portfolio · À propos · Contact</div>
+  <div class="o1-content">
+    <p class="eyebrow">Infographiste — Charleroi</p>
+    <h1>Loris<br>Fauville</h1>
+    <p>Graphiste passionné, je crée des visuels clairs et percutants — identité, motion, design sportif et UI/UX dans un seul profil.</p>
+    <span class="btn">Me contacter →</span>
+  </div>
+</div>
+
+<!-- OPTION 2 -->
+<div class="option">
+  <span class="option-tag">Option 2</span>
+  <span class="option-name">Portrait humain</span>
+  <div class="navpill">Accueil · Portfolio · À propos · Contact</div>
+  <div class="o2-grid">
+    <div class="o2-left">
+      <p class="eyebrow">Infographiste</p>
+      <h1>Loris<br>Fauville</h1>
+      <p>Graphiste passionné basé à Charleroi. Identité visuelle, motion design, design sportif et UI/UX.</p>
+      <span class="btn" style="width:fit-content;">Me contacter →</span>
+    </div>
+    <div class="o2-right">
+      <img src="photo_site.png" alt="Loris Fauville">
+      <div class="o2-strip">
+        <div style="background-image:url('Sport/Dembele.jpg')"></div>
+        <div style="background-image:url('dwello/Dwello_couverture_ANIM.jpg')"></div>
+        <div style="background-image:url('Spark/Affiche.jpg')"></div>
+        <div style="background-image:url('Nebula fc/Visuel_Insta-scaled.jpg')"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION 3 -->
+<div class="option">
+  <span class="option-tag">Option 3</span>
+  <span class="option-name">Flux vertical magazine</span>
+  <div class="navpill">Accueil · Portfolio · À propos · Contact</div>
+  <div class="o3-wrap">
+    <p class="eyebrow">Infographiste · Charleroi</p>
+    <h1>Loris Fauville</h1>
+    <div class="o3-image"></div>
+    <p>Identité visuelle, motion design, design sportif et UI/UX — un profil complet, présenté comme une couverture de magazine.</p>
+    <span class="btn">Me contacter →</span>
+  </div>
+</div>
+
+<!-- OPTION 4 -->
+<div class="option">
+  <span class="option-tag">Option 4</span>
+  <span class="option-name">Bento éditorial</span>
+  <div class="navpill">Accueil · Portfolio · À propos · Contact</div>
+  <div class="o4-grid">
+    <div class="o4-cell text" style="grid-row:span 2;">
+      <p class="eyebrow">Infographiste</p>
+      <h1>Loris<br>Fauville</h1>
+      <p>Graphiste passionné, je crée des visuels clairs et percutants avec le souci du détail.</p>
+    </div>
+    <div class="o4-cell img" style="background-image:url('Sport/Dembele.jpg');"><span>Design sportif</span></div>
+    <div class="o4-cell img" style="background-image:url('dwello/Dwello_couverture_ANIM.jpg');"><span>Identité visuelle</span></div>
+    <div class="o4-cell img" style="background-image:url('Nebula fc/Ticket_Match-scaled.jpg');grid-column:span 1;"><span>Fin d'étude</span></div>
+    <div class="o4-cell cta"><span class="btn" style="background:#111;color:var(--mint);">Me contacter →</span></div>
+  </div>
+</div>
+
+<!-- OPTION 5 -->
+<div class="option">
+  <span class="option-tag">Option 5</span>
+  <span class="option-name">Minimal typographique</span>
+  <div class="navpill">Accueil · Portfolio · À propos · Contact</div>
+  <div class="o5-wrap">
+    <p class="eyebrow">Infographiste</p>
+    <h1>Loris<br><span class="last">Fauville</span></h1>
+  </div>
+  <div class="o5-bottom">
+    <p>Identité visuelle, motion design, design sportif et UI/UX — Charleroi.</p>
+    <span class="btn">Me contacter →</span>
+  </div>
+</div>
+
+</body>
+</html>
