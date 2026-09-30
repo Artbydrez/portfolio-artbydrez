@@ -322,7 +322,11 @@ html.light {
 .about-right {
   padding: 52px 60px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto;
 }
-.about-section-title { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label); margin-bottom: 20px; }
+.about-section-title {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-label);
+  display: flex; align-items: center; gap: 12px; margin-top: 40px; margin-bottom: 20px;
+}
+.about-section-title::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--accent); flex-shrink: 0; }
 .skills-list { display: flex; flex-direction: column; }
 .skill-row {
   display: flex; justify-content: space-between; align-items: center;
