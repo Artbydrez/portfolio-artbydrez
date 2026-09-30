@@ -448,6 +448,9 @@ html.light {
   transition: border-color 0.3s;
 }
 .portfolio-card:hover { border-color: rgba(199,255,237,0.4); }
+.portfolio-card:focus-visible, .carousel-slide:focus-visible, .po-panel:focus-visible, .dropdown-item:focus-visible {
+  outline: 2px solid var(--mint); outline-offset: -2px;
+}
 
 /* Card-bg en flux normal : l'image pousse la hauteur */
 .portfolio-card-bg { display: block; line-height: 0; }
