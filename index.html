@@ -2177,6 +2177,7 @@ function goTo(index) {
     document.querySelectorAll('.page-content').forEach(el => el.classList.remove('visible'));
     const activeContent = document.querySelectorAll('.page')[index].querySelector('.page-content');
     if (activeContent) activeContent.classList.add('visible');
+    motionEnter(index);
   }, 200);
 }
 (function restoreFromHash() {
