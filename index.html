@@ -1988,10 +1988,17 @@ function toggleTheme() {
 let current = 0;
 const total = 12;
 const portfolioPages = [1, 2, 3, 4, 5, 8, 9, 10];
+function updateInert() {
+  document.querySelectorAll('.page').forEach((el, i) => {
+    if (i === current) el.removeAttribute('inert');
+    else el.setAttribute('inert', '');
+  });
+}
 function goTo(index) {
   if (index === current) return;
   current = index;
   location.hash = index;
+  updateInert();
   document.getElementById('slider').className = 'slider slide-' + index;
   document.querySelectorAll('.nav-link').forEach(el => {
     el.classList.toggle('active', parseInt(el.dataset.page) === index);
