@@ -2088,9 +2088,80 @@ function updateInert() {
     else el.setAttribute('inert', '');
   });
 }
+// ── Site motion : titres découpés en mots + apparitions en cascade (.sr) ──
+const motionPages = [...document.querySelectorAll('.page')];
+let motionArrived = true;
+function splitWords(root) {
+  let w = 0;
+  (function walk(node) {
+    [...node.childNodes].forEach(child => {
+      if (child.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach(tok => {
+          if (!tok) return;
+          if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(' ')); return; }
+          const outer = document.createElement('span'); outer.className = 'w';
+          const inner = document.createElement('span'); inner.className = 'wi';
+          inner.style.setProperty('--w', w++); inner.textContent = tok;
+          outer.appendChild(inner); frag.appendChild(outer);
+        });
+        child.replaceWith(frag);
+      } else if (child.nodeType === 1 && child.tagName !== 'BR') walk(child);
+    });
+  })(root);
+  root.classList.add('split');
+}
+document.querySelectorAll('.home-title, .contact-title, .portfolio-title, .project-title').forEach(splitWords);
+const contactAccent = document.querySelector('.contact-title > span:not(.w)');
+if (contactAccent) contactAccent.classList.add('accent-u');
+const srTargets = [
+  '#page-home .home-desc', '#page-home .cta-group',
+  '.po-panel',
+  '.portfolio-label', '.portfolio-subtitle', '.portfolio-header .link-arrow-cta', '.portfolio-header > div:last-child',
+  '.portfolio-grid > .portfolio-card', '.tfe-section', '.tfe-grid > .portfolio-card',
+  '.contact-label', '.contact-sub', '.contact-link-row', '.form-label', '.contact-right form',
+  '.project-tag', '.project-subtitle', '.project-desc', '.project-meta-item', '.project-nav',
+  '.project-cell', '.nebula-section-title', '.nebula-section-desc', '.nebula-story-text', '.nebula-symbol-text', '.nebula-jersey-label'
+];
+const srEls = [...document.querySelectorAll(srTargets.join(','))];
+srEls.forEach(el => el.classList.add('sr'));
+function srShow(el, n) {
+  el.style.setProperty('--sd', Math.min(0.1 + n * 0.06, 0.7) + 's');
+  el.classList.add('in');
+}
+// À l'arrivée sur une page : révèle en cascade ce qui est déjà à l'écran
+function motionEnter(index) {
+  motionArrived = true;
+  let n = 0;
+  motionPages[index].querySelectorAll('.sr:not(.in)').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) srShow(el, n++);
+  });
+}
+// En quittant : remet à zéro les autres pages une fois la transition finie
+function motionLeave() {
+  motionArrived = false;
+  setTimeout(() => {
+    motionPages.forEach((p, i) => { if (i !== current) p.querySelectorAll('.sr.in').forEach(el => el.classList.remove('in')); });
+  }, 750);
+}
+// Au défilement dans une page : révèle ce qui entre à l'écran
+const srObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+  if (!motionArrived) return;
+  let n = 0;
+  entries.forEach(e => {
+    if (!e.isIntersecting || e.target.classList.contains('in')) return;
+    if (motionPages.indexOf(e.target.closest('.page')) !== current) return;
+    srShow(e.target, n++);
+  });
+}, { threshold: 0.12 }) : null;
+if (srObserver) srEls.forEach(el => srObserver.observe(el));
+else srEls.forEach(el => el.classList.add('in'));
+motionEnter(current);
 function goTo(index) {
   if (index === current) return;
   current = index;
+  motionLeave();
   location.hash = index;
   updateInert();
   document.getElementById('slider').className = 'slider slide-' + index;
