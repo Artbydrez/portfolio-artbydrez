@@ -711,6 +711,55 @@ html.light {
 }
 .about-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 
+/* ── ABOUT MOTION — se joue à chaque arrivée sur la page (.about-wrap.visible) ── */
+/* Photo : rideau d'accent qui balaie puis découvre la photo, zoom arrière */
+.about-left { position: relative; }
+.about-left::after {
+  content: ''; position: absolute; inset: 0; background: var(--accent); z-index: 2;
+  transform: scaleX(0); pointer-events: none;
+}
+.about-wrap.visible .about-left::after { animation: about-curtain 1.1s cubic-bezier(0.77,0,0.18,1) both; }
+.about-wrap.visible .about-photo-wrap { animation: about-photo-in 1.4s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+.about-photo-wrap img { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+@keyframes about-curtain {
+  0% { transform: scaleX(0); transform-origin: left; }
+  45% { transform: scaleX(1); transform-origin: left; }
+  55% { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+@keyframes about-photo-in { 0% { opacity: 0; transform: scale(1.12); } 1% { opacity: 1; } 100% { opacity: 1; transform: scale(1); } }
+/* Titre : mots révélés par masque, puis soulignement sous « intention. » */
+.about-title .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.about-title .wi { display: inline-block; position: relative; }
+.about-wrap.visible .about-title .wi { animation: about-word-up 0.8s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.09s + 0.1s) both; }
+.about-title .accent .wi::after {
+  content: ''; position: absolute; left: 0; right: 0.12em; bottom: 0.02em; height: 3px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+}
+.about-wrap.visible .about-title .accent .wi::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.65s forwards; }
+@keyframes about-word-up { from { transform: translateY(105%); } }
+@keyframes about-underline { to { transform: scaleX(1); } }
+/* Mots-clés : surlignage qui se trace l'un après l'autre */
+.about-body strong.kw {
+  --hl: color-mix(in srgb, var(--mint) 28%, transparent);
+  background-image: linear-gradient(var(--hl), var(--hl));
+  background-repeat: no-repeat; background-position: 0 85%; background-size: 0% 45%;
+  padding: 0 2px; margin: 0 -2px;
+}
+html.light .about-body strong.kw { --hl: color-mix(in srgb, var(--accent) 22%, transparent); }
+.about-wrap.visible .about-body strong.kw { animation: about-highlight 0.7s cubic-bezier(0.65,0,0.35,1) calc(var(--k) * 0.25s + 0.9s) forwards; }
+@keyframes about-highlight { to { background-size: 100% 45%; } }
+/* Bouton magnétique (déplacement géré en JS) + flèche */
+.about-cta .btn-mint { transition: opacity 0.2s, transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+.about-cta .btn-mint .arrow { display: inline-block; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); }
+.about-cta .btn-mint:hover .arrow { transform: translateX(5px); }
+@media (prefers-reduced-motion: reduce) {
+  .about-wrap.visible .about-left::after, .about-wrap.visible .about-photo-wrap,
+  .about-wrap.visible .about-title .wi { animation: none; }
+  .about-wrap.visible .about-title .accent .wi::after,
+  .about-wrap.visible .about-body strong.kw { animation-duration: 0.01s; animation-delay: 0s; }
+}
+
 .page-indicator { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 200; transition: opacity 0.3s; }
 .page-indicator.hidden { opacity: 0; pointer-events: none; }
 .pi-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted); transition: background 0.3s, transform 0.3s; cursor: pointer; }
