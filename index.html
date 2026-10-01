@@ -2095,11 +2095,13 @@ function openLightbox(src, type) {
     ? `<video src="${src}" autoplay loop muted playsinline style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;"></video>`
     : `<img src="${src}" style="max-width:90vw;max-height:88vh;display:block;border-radius:4px;">`;
   lb.classList.add('open');
+  lb.removeAttribute('inert');
   document.body.style.overflow = 'hidden';
 }
 function closeLightbox() {
   const lb = document.getElementById('lightbox');
   lb.classList.remove('open');
+  lb.setAttribute('inert', '');
   setTimeout(() => { document.getElementById('lightbox-media').innerHTML = ''; }, 300);
   document.body.style.overflow = '';
 }
