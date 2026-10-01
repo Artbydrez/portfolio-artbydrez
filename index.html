@@ -2218,11 +2218,13 @@ function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
   const btn = document.getElementById('hamburger');
   const isOpen = menu.classList.toggle('open');
+  menu.toggleAttribute('inert', !isOpen);
   btn.classList.toggle('open', isOpen);
   document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 function closeMobileMenu() {
   document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('mobileMenu').setAttribute('inert', '');
   document.getElementById('hamburger').classList.remove('open');
   document.body.style.overflow = '';
 }
