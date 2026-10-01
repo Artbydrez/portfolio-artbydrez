@@ -754,7 +754,8 @@ html.light {
 
 /* ── SITE MOTION — même langage partout, volontairement discret ── */
 /* Titres : mots révélés par masque (découpage fait en JS, classe .split) */
-.split .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.06em 0 0.08em; margin: -0.06em 0 -0.08em; }
+/* Marge latérale compensée : sinon le masque rogne la dernière lettre (letter-spacing négatif) */
+.split .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.06em 0.12em 0.08em; margin: -0.06em -0.12em -0.08em; }
 .split .wi { display: inline-block; position: relative; }
 .page-content.visible .split .wi { animation: about-word-up 0.75s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.07s + 0.1s) both; }
 /* Trait sous le mot d'accent (Contact, comme sur À propos) */
