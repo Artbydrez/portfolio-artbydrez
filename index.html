@@ -363,6 +363,11 @@ html.light {
 .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
 .form-group textarea { resize: none; height: 80px; }
 .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-muted); }
+.form-error { font-size: 11px; color: #ff6b6b; margin-top: 6px; }
+.form-status { font-size: 12px; margin-top: 14px; }
+.form-status.success { color: var(--accent); }
+.form-status.error { color: #ff6b6b; }
+.form-submit:disabled { opacity: 0.6; cursor: default; }
 .form-submit {
   margin-top: 24px; width: 100%; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
   padding: 14px; background: var(--mint); border: none; color: var(--on-mint);
