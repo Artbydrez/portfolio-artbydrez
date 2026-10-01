@@ -422,7 +422,7 @@ html.light {
 }
 .portfolio-label::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--accent); flex-shrink: 0; }
 .portfolio-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
-.portfolio-title span { color: var(--accent); }
+.portfolio-title > span:not(.w) { color: var(--accent); }
 .portfolio-count { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; }
 .portfolio-subtitle { font-size: 13px; color: var(--text-primary); margin-top: 10px; max-width: 460px; line-height: 1.6; }
 .portfolio-grid {
