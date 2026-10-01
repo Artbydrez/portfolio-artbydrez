@@ -714,15 +714,15 @@ html.light {
 }
 .about-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 
-/* ── ABOUT MOTION — se joue à chaque arrivée sur la page (.about-wrap.visible) ── */
+/* ── ABOUT MOTION — se joue à chaque arrivée sur la page (.motion-on, posée une fois la page arrivée) ── */
 /* Photo : rideau d'accent qui balaie puis découvre la photo, zoom arrière */
 .about-left { position: relative; }
 .about-left::after {
   content: ''; position: absolute; inset: 0; background: var(--accent); z-index: 2;
   transform: scaleX(0); pointer-events: none;
 }
-.about-wrap.visible .about-left::after { animation: about-curtain 1.1s cubic-bezier(0.77,0,0.18,1) both; }
-.about-wrap.visible .about-photo-wrap { animation: about-photo-in 1.4s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
+.about-wrap.motion-on .about-left::after { animation: about-curtain 1.1s cubic-bezier(0.77,0,0.18,1) both; }
+.about-wrap.motion-on .about-photo-wrap { animation: about-photo-in 1.4s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
 .about-photo-wrap img { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
 @keyframes about-curtain {
   0% { transform: scaleX(0); transform-origin: left; }
@@ -732,14 +732,16 @@ html.light {
 }
 @keyframes about-photo-in { 0% { opacity: 0; transform: scale(1.12); } 1% { opacity: 1; } 100% { opacity: 1; transform: scale(1); } }
 /* Titre : mots révélés par masque, puis soulignement sous « intention. » */
+.about-wrap:not(.motion-on) .about-title .wi { transform: translateY(105%); }
+.about-wrap:not(.motion-on) .about-photo-wrap { opacity: 0; }
 .about-title .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 0.12em 0.08em; margin: 0 -0.12em -0.08em; }
 .about-title .wi { display: inline-block; position: relative; }
-.about-wrap.visible .about-title .wi { animation: about-word-up 0.8s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.09s + 0.1s) both; }
+.about-wrap.motion-on .about-title .wi { animation: about-word-up 0.9s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.1s + 0.1s) both; }
 .about-title .accent .wi::after {
   content: ''; position: absolute; left: 0; right: 0.12em; bottom: 0.02em; height: 3px;
   background: var(--accent); transform: scaleX(0); transform-origin: left;
 }
-.about-wrap.visible .about-title .accent .wi::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.65s forwards; }
+.about-wrap.motion-on .about-title .accent .wi::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.65s forwards; }
 @keyframes about-word-up { from { transform: translateY(105%); } }
 @keyframes about-underline { to { transform: scaleX(1); } }
 /* Bouton magnétique (déplacement géré en JS) + flèche */
@@ -747,9 +749,9 @@ html.light {
 .about-cta .btn-mint .arrow { display: inline-block; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); }
 .about-cta .btn-mint:hover .arrow { transform: translateX(5px); }
 @media (prefers-reduced-motion: reduce) {
-  .about-wrap.visible .about-left::after, .about-wrap.visible .about-photo-wrap,
-  .about-wrap.visible .about-title .wi { animation: none; }
-  .about-wrap.visible .about-title .accent .wi::after { animation-duration: 0.01s; animation-delay: 0s; }
+  .about-wrap.motion-on .about-left::after, .about-wrap.motion-on .about-photo-wrap,
+  .about-wrap.motion-on .about-title .wi { animation: none; }
+  .about-wrap.motion-on .about-title .accent .wi::after { animation-duration: 0.01s; animation-delay: 0s; }
 }
 
 /* ── SITE MOTION — même langage partout, volontairement discret ── */
@@ -757,19 +759,20 @@ html.light {
 /* Marge latérale compensée : sinon le masque rogne la dernière lettre (letter-spacing négatif) */
 .split .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.06em 0.12em 0.08em; margin: -0.06em -0.12em -0.08em; }
 .split .wi { display: inline-block; position: relative; }
-.page-content.visible .split .wi { animation: about-word-up 0.75s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.07s + 0.1s) both; }
+.page-content:not(.motion-on) .split .wi { transform: translateY(105%); }
+.motion-on .split .wi { animation: about-word-up 0.9s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.09s) both; }
 /* Trait sous le mot d'accent (Contact, comme sur À propos) */
 .split .accent-u .wi:last-child::after {
   content: ''; position: absolute; left: 0; right: 0.12em; bottom: 0.02em; height: 3px;
   background: var(--accent); transform: scaleX(0); transform-origin: left;
 }
-.page-content.visible .split .accent-u .wi:last-child::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.6s forwards; }
+.motion-on .split .accent-u .wi:last-child::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.6s forwards; }
 /* Contenu : fondu + légère montée, en cascade à l'arrivée ou au défilement (classe .sr gérée en JS) */
 .sr:not(.in) { opacity: 0; }
-.sr.in { animation: sr-in 0.7s cubic-bezier(0.22,1,0.36,1) var(--sd, 0s) backwards; }
+.sr.in { animation: sr-in 0.85s cubic-bezier(0.22,1,0.36,1) var(--sd, 0s) backwards; }
 @keyframes sr-in { from { opacity: 0; transform: translateY(12px); } }
 /* Vue Portfolio : chaque panneau se découvre de bas en haut, puis son numéro et son titre montent */
-.po-panel.sr.in { animation: po-in 0.9s cubic-bezier(0.77,0,0.18,1) var(--pd) backwards; }
+.po-panel.sr.in { animation: po-in 1.1s cubic-bezier(0.77,0,0.18,1) var(--pd) backwards; }
 .po-panel.sr.in .po-panel-top { animation: sr-in 0.7s cubic-bezier(0.22,1,0.36,1) calc(var(--pd) + 0.45s) backwards; }
 .po-panel:nth-child(1) { --pd: 0.1s; }
 .po-panel:nth-child(2) { --pd: 0.2s; }
@@ -789,9 +792,11 @@ html.light {
 }
 .contact-link-row:hover::after { transform: scaleX(1); }
 @media (prefers-reduced-motion: reduce) {
-  .page-content.visible .split .wi, .sr.in, .po-panel.sr.in, .po-panel.sr.in .po-panel-top { animation: none; }
+  .motion-on .split .wi, .sr.in, .po-panel.sr.in, .po-panel.sr.in .po-panel-top { animation: none; }
   .sr:not(.in) { opacity: 1; }
-  .page-content.visible .split .accent-u .wi:last-child::after { animation-duration: 0.01s; animation-delay: 0s; }
+  .page-content:not(.motion-on) .split .wi, .about-wrap:not(.motion-on) .about-title .wi { transform: none; }
+  .about-wrap:not(.motion-on) .about-photo-wrap { opacity: 1; }
+  .motion-on .split .accent-u .wi:last-child::after { animation-duration: 0.01s; animation-delay: 0s; }
   .portfolio-card-inner p, .po-panel:hover .po-panel-title { transform: none; }
 }
 
@@ -2135,12 +2140,16 @@ const srTargets = [
 const srEls = [...document.querySelectorAll(srTargets.join(','))];
 srEls.forEach(el => el.classList.add('sr'));
 function srShow(el, n) {
-  el.style.setProperty('--sd', Math.min(0.1 + n * 0.06, 0.7) + 's');
+  el.style.setProperty('--sd', Math.min(0.15 + n * 0.08, 0.9) + 's');
   el.classList.add('in');
 }
 // À l'arrivée sur une page : révèle en cascade ce qui est déjà à l'écran
 function motionEnter(index) {
   motionArrived = true;
+  const content = motionPages[index].querySelector('.page-content');
+  if (content) content.classList.add('motion-on');
+  const tl = motionPages[index].querySelector('.timeline.tl-anim');
+  if (tl) { const r = tl.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) tl.classList.add('tl-in'); }
   let n = 0;
   motionPages[index].querySelectorAll('.sr:not(.in)').forEach(el => {
     const r = el.getBoundingClientRect();
@@ -2151,7 +2160,11 @@ function motionEnter(index) {
 function motionLeave() {
   motionArrived = false;
   setTimeout(() => {
-    motionPages.forEach((p, i) => { if (i !== current) p.querySelectorAll('.sr.in').forEach(el => el.classList.remove('in')); });
+    motionPages.forEach((p, i) => {
+      if (i === current) return;
+      p.querySelectorAll('.sr.in').forEach(el => el.classList.remove('in'));
+      p.querySelectorAll('.motion-on').forEach(el => el.classList.remove('motion-on'));
+    });
   }, 750);
 }
 // Au défilement dans une page : révèle ce qui entre à l'écran
@@ -2166,7 +2179,7 @@ const srObserver = 'IntersectionObserver' in window ? new IntersectionObserver(e
 }, { threshold: 0.12 }) : null;
 if (srObserver) srEls.forEach(el => srObserver.observe(el));
 else srEls.forEach(el => el.classList.add('in'));
-motionEnter(current);
+setTimeout(() => motionEnter(current), 150);
 function goTo(index) {
   if (index === current) return;
   current = index;
@@ -2186,8 +2199,9 @@ function goTo(index) {
     document.querySelectorAll('.page-content').forEach(el => el.classList.remove('visible'));
     const activeContent = document.querySelectorAll('.page')[index].querySelector('.page-content');
     if (activeContent) activeContent.classList.add('visible');
-    motionEnter(index);
   }, 200);
+  // Les animations démarrent une fois le glissement de page (0,7 s) presque terminé
+  setTimeout(() => { if (index === current) motionEnter(index); }, 650);
 }
 (function restoreFromHash() {
   const h = parseInt(location.hash.replace('#', ''));
@@ -2205,7 +2219,10 @@ window.addEventListener('hashchange', () => {
   tl.querySelectorAll('.tl-item').forEach((item, i) => item.style.setProperty('--i', i));
   tl.classList.add('tl-anim');
   new IntersectionObserver(entries => {
-    entries.forEach(e => tl.classList.toggle('tl-in', e.isIntersecting));
+    entries.forEach(e => {
+      const onPage = tl.closest('.page-content').classList.contains('motion-on');
+      tl.classList.toggle('tl-in', e.isIntersecting && onPage);
+    });
   }, { threshold: 0.25 }).observe(tl);
 })();
 // À propos — parallaxe de la photo et bouton magnétique (souris uniquement)
