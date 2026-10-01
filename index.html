@@ -739,16 +739,6 @@ html.light {
 .about-wrap.visible .about-title .accent .wi::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.65s forwards; }
 @keyframes about-word-up { from { transform: translateY(105%); } }
 @keyframes about-underline { to { transform: scaleX(1); } }
-/* Mots-clés : surlignage qui se trace l'un après l'autre */
-.about-body strong.kw {
-  --hl: color-mix(in srgb, var(--mint) 28%, transparent);
-  background-image: linear-gradient(var(--hl), var(--hl));
-  background-repeat: no-repeat; background-position: 0 85%; background-size: 0% 45%;
-  padding: 0 2px; margin: 0 -2px;
-}
-html.light .about-body strong.kw { --hl: color-mix(in srgb, var(--accent) 22%, transparent); }
-.about-wrap.visible .about-body strong.kw { animation: about-highlight 0.7s cubic-bezier(0.65,0,0.35,1) calc(var(--k) * 0.25s + 0.9s) forwards; }
-@keyframes about-highlight { to { background-size: 100% 45%; } }
 /* Bouton magnétique (déplacement géré en JS) + flèche */
 .about-cta .btn-mint { transition: opacity 0.2s, transform 0.35s cubic-bezier(0.22,1,0.36,1); }
 .about-cta .btn-mint .arrow { display: inline-block; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); }
@@ -756,8 +746,41 @@ html.light .about-body strong.kw { --hl: color-mix(in srgb, var(--accent) 22%, t
 @media (prefers-reduced-motion: reduce) {
   .about-wrap.visible .about-left::after, .about-wrap.visible .about-photo-wrap,
   .about-wrap.visible .about-title .wi { animation: none; }
-  .about-wrap.visible .about-title .accent .wi::after,
-  .about-wrap.visible .about-body strong.kw { animation-duration: 0.01s; animation-delay: 0s; }
+  .about-wrap.visible .about-title .accent .wi::after { animation-duration: 0.01s; animation-delay: 0s; }
+}
+
+/* ── SITE MOTION — même langage partout, volontairement discret ── */
+/* Titres : mots révélés par masque (découpage fait en JS, classe .split) */
+.split .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.06em 0 0.08em; margin: -0.06em 0 -0.08em; }
+.split .wi { display: inline-block; position: relative; }
+.page-content.visible .split .wi { animation: about-word-up 0.75s cubic-bezier(0.22,1,0.36,1) calc(var(--w) * 0.07s + 0.1s) both; }
+/* Trait sous le mot d'accent (Contact, comme sur À propos) */
+.split .accent-u .wi:last-child::after {
+  content: ''; position: absolute; left: 0; right: 0.12em; bottom: 0.02em; height: 3px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+}
+.page-content.visible .split .accent-u .wi:last-child::after { animation: about-underline 0.6s cubic-bezier(0.65,0,0.35,1) 0.6s forwards; }
+/* Contenu : fondu + légère montée, en cascade à l'arrivée ou au défilement (classe .sr gérée en JS) */
+.sr:not(.in) { opacity: 0; }
+.sr.in { animation: sr-in 0.7s cubic-bezier(0.22,1,0.36,1) var(--sd, 0s) backwards; }
+@keyframes sr-in { from { opacity: 0; transform: translateY(12px); } }
+/* Survols */
+.portfolio-card-inner p { transform: translateY(6px); transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+.portfolio-card-inner .portfolio-card-name { transition-delay: 0.04s; }
+.portfolio-card:hover .portfolio-card-inner p { transform: none; }
+.po-panel-title { transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+.po-panel:hover .po-panel-title { transform: translateX(4px); }
+.contact-link-row { position: relative; }
+.contact-link-row::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -0.5px; height: 1px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.45s cubic-bezier(0.65,0,0.35,1);
+}
+.contact-link-row:hover::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .page-content.visible .split .wi, .sr.in { animation: none; }
+  .sr:not(.in) { opacity: 1; }
+  .page-content.visible .split .accent-u .wi:last-child::after { animation-duration: 0.01s; animation-delay: 0s; }
+  .portfolio-card-inner p, .po-panel:hover .po-panel-title { transform: none; }
 }
 
 .page-indicator { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 200; transition: opacity 0.3s; }
@@ -1584,7 +1607,7 @@ html.light .accent-dot { background: var(--accent); }
           <h2 class="about-title"><span class="w"><span class="wi" style="--w:0">Design</span></span><br><span class="w"><span class="wi" style="--w:1">avec</span></span> <span class="w accent"><span class="wi" style="--w:2">intention.</span></span></h2>
           <div class="about-body">
             <p>Je suis <strong>Loris Fauville</strong>, infographiste et graphiste bas&#233; dans la r&#233;gion de Charleroi.</p>
-            <p>Je con&#231;ois des <strong class="kw" style="--k:0">identit&#233;s visuelles</strong> qui d&#233;finissent l'image d'une marque, j'&#233;labore des <strong class="kw" style="--k:1">designs sportifs</strong> adapt&#233;s aux clubs et aux &#233;v&#233;nements, et je r&#233;alise du <strong class="kw" style="--k:2">motion design</strong> pour donner mouvement et rythme aux projets.</p>
+            <p>Je con&#231;ois des <strong>identit&#233;s visuelles</strong> qui d&#233;finissent l'image d'une marque, j'&#233;labore des <strong>designs sportifs</strong> adapt&#233;s aux clubs et aux &#233;v&#233;nements, et je r&#233;alise du <strong>motion design</strong> pour donner mouvement et rythme aux projets.</p>
             <p>Toujours avec le souci du d&#233;tail, et une obsession pour les fichiers bien nomm&#233;s.</p>
           </div>
         </div>
