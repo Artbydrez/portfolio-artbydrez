@@ -767,6 +767,14 @@ html.light {
 .sr:not(.in) { opacity: 0; }
 .sr.in { animation: sr-in 0.7s cubic-bezier(0.22,1,0.36,1) var(--sd, 0s) backwards; }
 @keyframes sr-in { from { opacity: 0; transform: translateY(12px); } }
+/* Vue Portfolio : chaque panneau se découvre de bas en haut, puis son numéro et son titre montent */
+.po-panel.sr.in { animation: po-in 0.9s cubic-bezier(0.77,0,0.18,1) var(--pd) backwards; }
+.po-panel.sr.in .po-panel-top { animation: sr-in 0.7s cubic-bezier(0.22,1,0.36,1) calc(var(--pd) + 0.45s) backwards; }
+.po-panel:nth-child(1) { --pd: 0.1s; }
+.po-panel:nth-child(2) { --pd: 0.2s; }
+.po-panel:nth-child(3) { --pd: 0.3s; }
+.po-panel:nth-child(4) { --pd: 0.4s; }
+@keyframes po-in { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
 /* Survols */
 .portfolio-card-inner p { transform: translateY(6px); transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
 .portfolio-card-inner .portfolio-card-name { transition-delay: 0.04s; }
