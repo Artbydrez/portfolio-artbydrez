@@ -2042,6 +2042,16 @@ window.addEventListener('hashchange', () => {
   const h = parseInt(location.hash.replace('#', ''));
   if (!isNaN(h) && h >= 0 && h !== current) goTo(h);
 });
+// Parcours — rejoue l'animation à chaque fois que la timeline entre dans l'écran
+(function initTimelineMotion() {
+  const tl = document.querySelector('#page-about .timeline');
+  if (!tl || !('IntersectionObserver' in window)) return;
+  tl.querySelectorAll('.tl-item').forEach((item, i) => item.style.setProperty('--i', i));
+  tl.classList.add('tl-anim');
+  new IntersectionObserver(entries => {
+    entries.forEach(e => tl.classList.toggle('tl-in', e.isIntersecting));
+  }, { threshold: 0.25 }).observe(tl);
+})();
 function toggleDropdown() {
   const wrap = document.getElementById('portfolioDropdown');
   wrap.classList.toggle('open');
