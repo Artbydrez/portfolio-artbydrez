@@ -326,6 +326,41 @@ html.light {
 .tl-body { padding-top: 2px; padding-left: 4px; }
 .tl-place { font-size: 18px; font-weight: 400; color: var(--text-primary); margin-bottom: 3px; line-height: 1.25; }
 .tl-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+/* Parcours — motion : la ligne se trace, les points s'allument, les étapes glissent en cascade */
+.tl-item { --d: calc(var(--i, 0) * 0.16s); }
+.tl-line { transform-origin: top; }
+.timeline.tl-anim .tl-year,
+.timeline.tl-anim .tl-body { opacity: 0; transform: translateX(-10px); }
+.timeline.tl-anim .tl-dot { transform: scale(0); }
+.timeline.tl-anim .tl-line { transform: scaleY(0); }
+.timeline.tl-in .tl-year,
+.timeline.tl-in .tl-body {
+  opacity: 1; transform: none;
+  transition: opacity 0.5s ease var(--d), transform 0.6s cubic-bezier(0.22,1,0.36,1) var(--d);
+}
+.timeline.tl-in .tl-body { transition-delay: calc(var(--d) + 0.06s); }
+.timeline.tl-in .tl-dot {
+  transform: scale(1);
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1) var(--d), box-shadow 0.3s ease;
+  animation: tl-ping 0.9s ease-out calc(var(--d) + 0.15s) 1;
+}
+.timeline.tl-in .tl-line {
+  transform: scaleY(1);
+  transition: transform 0.5s cubic-bezier(0.65,0,0.35,1) calc(var(--d) + 0.2s);
+}
+@keyframes tl-ping {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mint) 55%, transparent); }
+  100% { box-shadow: 0 0 0 8px transparent; }
+}
+/* Survol d'une étape */
+.tl-place { transition: color 0.25s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+.tl-item:hover .tl-place { color: var(--accent); transform: translateX(4px); }
+.timeline.tl-in .tl-item:hover .tl-dot { transform: scale(1.6); transition-delay: 0s; }
+@media (prefers-reduced-motion: reduce) {
+  .timeline.tl-anim .tl-year, .timeline.tl-anim .tl-body,
+  .timeline.tl-anim .tl-dot, .timeline.tl-anim .tl-line { opacity: 1; transform: none; transition: none; animation: none; }
+  .tl-item:hover .tl-place { transform: none; }
+}
 .contact-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; margin-top: 96px; }
 .contact-left {
   padding: 48px 52px; border-right: 0.5px solid var(--border);
