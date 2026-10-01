@@ -2040,35 +2040,62 @@ function handleForm(e) {
   e.preventDefault();
   const form = e.target;
   const btn = form.querySelector('.form-submit');
-  const name = form.querySelector('input[type="text"]').value.trim();
-  const email = form.querySelector('input[type="email"]').value.trim();
-  const message = form.querySelector('textarea').value.trim();
+  const status = document.getElementById('form-status');
+  const nameInput = document.getElementById('f-name');
+  const emailInput = document.getElementById('f-email');
+  const messageInput = document.getElementById('f-message');
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const message = messageInput.value.trim();
 
-  // Validation visuelle
+  // Validation avec message texte visible (pas seulement la couleur)
   let valid = true;
-  [form.querySelector('input[type="text"]'), form.querySelector('input[type="email"]')].forEach(input => {
-    if (!input.value.trim()) {
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  [
+    { input: nameInput, errId: 'err-name', ok: !!name },
+    { input: emailInput, errId: 'err-email', ok: emailOk },
+  ].forEach(({ input, errId, ok }) => {
+    const err = document.getElementById(errId);
+    if (!ok) {
       input.style.borderColor = '#ff4d4d';
+      input.setAttribute('aria-invalid', 'true');
+      err.hidden = false;
       input.style.animation = 'shake 0.35s ease';
       setTimeout(() => { input.style.animation = ''; }, 400);
       valid = false;
     } else {
       input.style.borderColor = '';
+      input.removeAttribute('aria-invalid');
+      err.hidden = true;
     }
   });
   if (!valid) return;
 
-  // Ouvrir mailto avec les donn\u00e9es du formulaire
-  const subject = encodeURIComponent('Prise de contact \u2014 ' + name);
-  const body = encodeURIComponent('Nom : ' + name + '\nEmail : ' + email + '\n\n' + (message || '(aucun message)'));
-  window.location.href = 'mailto:info@artbydrez.com?subject=' + subject + '&body=' + body;
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours\u2026';
+  status.hidden = true;
 
-  // Feedback visuel succ\u00e8s
-  btn.textContent = 'Message pr\u00e9par\u00e9 \u2713';
-  btn.style.background = '#0c0c0c';
-  btn.style.color = '#22c55e';
-  btn.style.border = '0.5px solid #22c55e';
-  setTimeout(() => { btn.textContent = 'Envoyer le message \u2192'; btn.style = ''; form.reset(); }, 4000);
+  fetch('https://formsubmit.co/ajax/info@artbydrez.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ name, email, message: message || '(aucun message)', _subject: 'Prise de contact \u2014 ' + name })
+  })
+    .then(res => { if (!res.ok) throw new Error('send failed'); return res.json(); })
+    .then(() => {
+      btn.disabled = false;
+      btn.textContent = 'Envoyer le message \u2192';
+      status.hidden = false;
+      status.className = 'form-status success';
+      status.textContent = 'Message envoy\u00e9 \u2014 je reviens vers vous rapidement.';
+      form.reset();
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Envoyer le message \u2192';
+      status.hidden = false;
+      status.className = 'form-status error';
+      status.textContent = 'L\u2019envoi a \u00e9chou\u00e9. \u00c9crivez-moi directement \u00e0 info@artbydrez.com.';
+    });
 }
 
 // ── Lightbox ──
