@@ -2180,6 +2180,7 @@ syncVideos(current, true);
 // En quittant : remet à zéro les autres pages une fois la transition finie
 function motionLeave() {
   motionArrived = false;
+  loadPageMedia(current);
   syncVideos(current, false);
   setTimeout(() => {
     syncVideos(current, true);
