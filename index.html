@@ -1584,7 +1584,7 @@ html.light .accent-dot { background: var(--accent); }
           <h2 class="about-title"><span class="w"><span class="wi" style="--w:0">Design</span></span><br><span class="w"><span class="wi" style="--w:1">avec</span></span> <span class="w accent"><span class="wi" style="--w:2">intention.</span></span></h2>
           <div class="about-body">
             <p>Je suis <strong>Loris Fauville</strong>, infographiste et graphiste bas&#233; dans la r&#233;gion de Charleroi.</p>
-            <p>Je con&#231;ois des <strong>identit&#233;s visuelles</strong> qui d&#233;finissent l'image d'une marque, j'&#233;labore des <strong>designs sportifs</strong> adapt&#233;s aux clubs et aux &#233;v&#233;nements, et je r&#233;alise du <strong>motion design</strong> pour donner mouvement et rythme aux projets.</p>
+            <p>Je con&#231;ois des <strong class="kw" style="--k:0">identit&#233;s visuelles</strong> qui d&#233;finissent l'image d'une marque, j'&#233;labore des <strong class="kw" style="--k:1">designs sportifs</strong> adapt&#233;s aux clubs et aux &#233;v&#233;nements, et je r&#233;alise du <strong class="kw" style="--k:2">motion design</strong> pour donner mouvement et rythme aux projets.</p>
             <p>Toujours avec le souci du d&#233;tail, et une obsession pour les fichiers bien nomm&#233;s.</p>
           </div>
         </div>
@@ -1626,7 +1626,7 @@ html.light .accent-dot { background: var(--accent); }
           </div>
         </div>
         <div class="about-cta">
-          <button class="btn-mint" onclick="goTo(7)">Discutons du poste &#8594;</button>
+          <button class="btn-mint" onclick="goTo(7)">Discutons du poste <span class="arrow">&#8594;</span></button>
           <button class="btn-outline" onclick="goTo(1)">Voir le portfolio</button>
         </div>
       </div>
@@ -2100,6 +2100,31 @@ window.addEventListener('hashchange', () => {
   new IntersectionObserver(entries => {
     entries.forEach(e => tl.classList.toggle('tl-in', e.isIntersecting));
   }, { threshold: 0.25 }).observe(tl);
+})();
+// À propos — parallaxe de la photo et bouton magnétique (souris uniquement)
+(function initAboutPointerMotion() {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const left = document.querySelector('#page-about .about-left');
+  const img = left && left.querySelector('img');
+  if (img) {
+    left.addEventListener('mousemove', e => {
+      const r = left.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      img.style.transform = `scale(1.05) translate(${x * -14}px, ${y * -10}px)`;
+    });
+    left.addEventListener('mouseleave', () => { img.style.transform = ''; });
+  }
+  const btn = document.querySelector('#page-about .about-cta .btn-mint');
+  if (btn) {
+    document.addEventListener('mousemove', e => {
+      if (current !== 6) return;
+      const r = btn.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      btn.style.transform = Math.hypot(dx, dy) < 120 ? `translate(${dx * 0.25}px, ${dy * 0.35}px)` : '';
+    });
+  }
 })();
 function toggleDropdown() {
   const wrap = document.getElementById('portfolioDropdown');
