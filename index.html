@@ -2365,10 +2365,10 @@ function handleForm(e) {
   btn.textContent = 'Envoi en cours\u2026';
   status.hidden = true;
 
-  fetch('https://formsubmit.co/ajax/fauvilleloris@gmail.com', {
+  fetch(formEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({ name, email, message: message || '(aucun message)', _subject: 'Prise de contact \u2014 ' + name })
+    body: JSON.stringify({ name, email, message: message || '(aucun message)', _subject: 'Prise de contact \u2014 ' + name, _honey: '' })
   })
     .then(res => { if (!res.ok) throw new Error('send failed'); return res.json(); })
     .then(() => {
