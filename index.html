@@ -2307,9 +2307,28 @@ document.addEventListener('touchend', e => {
     if (dx > 0 && current > 0) goTo(current - 1);
   }
 }, { passive: true });
+// Adresses assemblées à l'exécution : jamais écrites en clair dans le code source (anti-collecte)
+const contactMail = ['info', 'artbydrez.com'].join('@');
+const formEndpoint = 'https://formsubmit.co/ajax/' + ['fauvilleloris', 'gmail.com'].join('@');
+(function initContactMail() {
+  const link = document.getElementById('contact-mail');
+  if (!link) return;
+  link.href = 'mailto:' + contactMail;
+  link.querySelector('.link-val').textContent = contactMail;
+})();
+const formOpenedAt = Date.now();
 function handleForm(e) {
   e.preventDefault();
   const form = e.target;
+  // Robots : champ piège rempli ou envoi quasi instantané → on fait semblant d'avoir envoyé, sans rien transmettre
+  const honey = document.getElementById('f-website');
+  if ((honey && honey.value) || Date.now() - formOpenedAt < 3000) {
+    form.reset();
+    const st = document.getElementById('form-status');
+    st.hidden = false; st.className = 'form-status success';
+    st.textContent = 'Message envoyé — je reviens vers vous rapidement.';
+    return;
+  }
   const btn = form.querySelector('.form-submit');
   const status = document.getElementById('form-status');
   const nameInput = document.getElementById('f-name');
